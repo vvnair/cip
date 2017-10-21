@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+        
         <style type="text/css">
         body {
                 padding-top: 120px;
@@ -85,7 +85,8 @@
 
         </style>
     </head>
-    <body>
+
+        <?php $this->load->view('template/header'); ?>
         <div id="fullscreen_bg" class="fullscreen_bg"/>
         <div class="container">
             <div class="row">
@@ -104,5 +105,4 @@
                 </div>
             </div>
         </div>
-    </body>
-</html>
+        <?php $this->load->view('template/footer'); ?>
