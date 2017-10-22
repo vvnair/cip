@@ -39,5 +39,38 @@
 
         }
 
+        public function sr_request($data){
+            $this->load->database();
+            $insert_data = array(
+                'baddress1' => $data['baddress1'],
+                'baddress2' => $data['baddress2'],
+                'baddress3' => $data['baddress3'],
+                'bcity' => $data['bcity'],
+                'bstate' => $data['bstate'],
+                'bcountry' => $data['bcountry'],
+                'bzipcode' => $data['bzipcode'],
+                'iaddress1' => $data['iaddress1'],
+                'iaddress2' => $data['iaddress2'],
+                'iaddress3' => $data['iaddress3'],
+                'icity' => $data['icity'],
+                'istate' => $data['icity'],
+                'icountry' => $data['icountry'],
+                'izipcode' => $data['izipcode'],
+                'request_number' => $data['request_number'],
+                'request_date' => $data['request_date'],
+                'user_id' => $data['user_id'],
+                'localcontactnum1' => $data['localcontactnum1'],
+                'localcontactnum2' => $data['localcontactnum2'],
+                'localcontact' => $data['localcontact'],
+                'localcontactemail' => $data['localcontactemail']
+
+            );
+
+            $this->db->insert('cip_address', $insert_data);
+            $insert_id = $this->db->insert_id();
+
+            return $insert_id;
+        }
+
     }
 ?>

@@ -7,6 +7,7 @@ class Login extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
         $this->load->library('session');
+        $this->load->model('register');
         error_reporting(E_ALL & ~E_NOTICE);
     }
 
@@ -55,5 +56,18 @@ class Login extends CI_Controller {
     public function logout(){
         session_destroy();
         redirect('','refresh');
+    }
+
+    public function new_request(){
+        //echo "<pre>";print_r($this->input->post());exit;
+        $insert_data = $this->input->post();
+        $insert = $this->register->sr_request($insert_data);
+        echo "<pre>";print_r($insert);exit;
+        
+        if($insert == "true"){
+            $this->load->view('profile_page');
+        }
+
+
     }
 }
