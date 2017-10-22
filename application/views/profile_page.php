@@ -35,23 +35,23 @@
                                                 <h4>Billing Address</h4>
                                                 <div class="form-group">
                                                     <label for="address1">Address Line1</label>
-                                                    <input type="text" class="form-control" id="baddress1">
+                                                    <input type="text" class="form-control" id="baddress1" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="address2">Address Line2</label>
-                                                    <input type="text" class="form-control" id="baddress2">
+                                                    <input type="text" class="form-control" id="baddress2" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="city">City</label>
-                                                    <input type="text" class="form-control" id="bcity">
+                                                    <input type="text" class="form-control" id="bcity" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="state">State</label>
-                                                    <input type="text" class="form-control" id="bstate">
+                                                    <input type="text" class="form-control" id="bstate" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="state">Country</label>
-                                                    <input type="text" class="form-control" id="bcountry">
+                                                    <input type="text" class="form-control" id="bcountry" required>
                                                 </div>
                                                 <button type="submit" class="btn btn-info">Submit</button>
                                             </div>
@@ -59,23 +59,23 @@
                                                 <h4>Implementation Address</h4>
                                                 <div class="form-group">
                                                     <label for="address1">Address Line1</label>
-                                                    <input type="text" class="form-control" id="iaddress1">
+                                                    <input type="text" class="form-control" id="iaddress1" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="address2">Address Line2</label>
-                                                    <input type="text" class="form-control" id="iaddress2">
+                                                    <input type="text" class="form-control" id="iaddress2" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="city">City</label>
-                                                    <input type="text" class="form-control" id="icity">
+                                                    <input type="text" class="form-control" id="icity" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="state">State</label>
-                                                    <input type="text" class="form-control" id="istate">
+                                                    <input type="text" class="form-control" id="istate" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="state">Country</label>
-                                                    <input type="text" class="form-control" id="icountry">
+                                                    <input type="text" class="form-control" id="icountry" required>
                                                 </div>
                                             </div>
 

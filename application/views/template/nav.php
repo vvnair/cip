@@ -7,9 +7,14 @@
     <ul class="nav navbar-nav">
 
     </ul>
+
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <?php if($this->session->userdata['session_id']){ ?>
+             <li><a href="http://localhost/cip/index.php/Login/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        <?php }else{ ?>
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+  <?php } ?>
+
     </ul>
   </div>
 </nav>

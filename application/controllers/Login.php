@@ -7,22 +7,9 @@ class Login extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
         $this->load->library('session');
+        error_reporting(E_ALL & ~E_NOTICE);
     }
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
+
 	public function index()
 	{
 		$this->load->view('login_form');
@@ -47,14 +34,26 @@ class Login extends CI_Controller {
         $login_data = $this->input->post();
         $this->load->model('register');
         $istrue = $this->register->usercheck($login_data);
-        if($istrue == 200){
-            $this->profile();
+        if($istrue['status'] == 200){
+            $this->profile($istrue['result']);
         }else{
-            $this->index();
+            redirect('','refresh');
         }
     }
 
-    public function profile(){
+    public function profile($data){
+
+        $arraydata = array(
+                'session_id'  => $data->id,
+                'user_email'  => $data->email,
+                'user_name' => $data->name
+        );
+        $this->session->set_userdata($arraydata);
         $this->load->view('profile_page');
+    }
+
+    public function logout(){
+        session_destroy();
+        redirect('','refresh');
     }
 }

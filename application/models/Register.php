@@ -26,15 +26,16 @@
             $this->db->where('password', $password);
             $this->db->from('cip_users');
             $query = $this->db->get();
-            $result = $query->result();
+            $result = $query->row();
 
             if(!empty($result)){
-                $status = "200";
+                $response['status'] = "200";
+                $response['result'] = $result;
             }else{
-                $status = "Error";
+                $response['status'] = "Error";
             }
 
-            return $status;
+            return $response;
 
         }
 
