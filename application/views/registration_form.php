@@ -160,8 +160,14 @@
                         </div>
 
                         <button class="btn" type="submit">Register</button>
+                        <div class="form__group" style="margin-left: 25px;">
+                            <a class="form__input" href="<?php echo base_url(); ?>">Already have an account ? Login Here</a>
+                        </div>
+
                     </form>
+
                 </div>
+
             </div>
         </div>
 
