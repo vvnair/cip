@@ -2,6 +2,16 @@
     class Register extends CI_Model {
 
 
+        function __construct() {
+            parent::__construct();
+            $this->load->helper('url');
+            $this->load->library('session');
+            $this->load->model('register');
+            $this->load->library('upload');
+            $this->load->helper('form');
+            error_reporting(E_ALL & ~E_NOTICE);
+        }
+
         public function register_into_db($data)
         {
             $this->load->database();
@@ -67,7 +77,10 @@
                 'localcontactnum1' => $data['localcontactnum1'],
                 'localcontactnum2' => $data['localcontactnum2'],
                 'localcontact' => $data['localcontact'],
-                'localcontactemail' => $data['localcontactemail']
+                'localcontactemail' => $data['localcontactemail'],
+                'igst' => $data['igst'],
+                'bgst' => $data['bgst'],
+                'bandwidth' => $data['bandwidth']
 
             );
 
@@ -76,7 +89,7 @@
 
             $status_data = array(
                 'sr_request_id' => $insert_id,
-                'status' => 'Initiated',
+                'status' => 'customer submitted',
                 'sr_request_number' => $data['request_number']
             );
 
@@ -119,6 +132,19 @@
 
             $this->db->where('sr_request_number', $data['req_num']);
             $this->db->update('cip_sr_status', $update_data);
+        }
+
+        public function upload_data($data,$id){
+            $this->load->database();
+
+            $file_data = array(
+                'filename' => $data['file_name'],
+                'filepath' => $data['file_path'],
+                'sr_request_number' => $id,
+                'fullpath' => $data['full_path']
+            );
+
+            $this->db->insert('cip_uploads', $file_data);
         }
     }
 ?>

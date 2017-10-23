@@ -110,6 +110,10 @@
                                                     <label for="state">Zip Code</label>
                                                     <input type="text" class="form-control" id="bzipcode" name="bzipcode" required>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="bgst">GSTIN Number</label>
+                                                    <input type="text" class="form-control" id="bgst" name="bgst" required>
+                                                </div>
                                                 <input type="hidden" name="request_number" value="<?php echo $request_number;?>" />
                                                 <input type="hidden" name="request_date" value="<?php echo $date; ?>" />
                                                 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
@@ -142,10 +146,24 @@
                                                     <label for="state">Country</label>
                                                     <input type="text" class="form-control" id="icountry" name="icountry" required>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="state">Zip Code</label>
-                                                    <input type="text" class="form-control" id="izipcode" name="izipcode" required>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="state">Zip Code</label>
+                                                        <input type="text" class="form-control" id="izipcode" name="izipcode" required>
+                                                    </div>
                                                 </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="bandwidth">BandWidth (Mbps)</label>
+                                                        <input type="text" class="form-control" id="bandwidth" name="bandwidth" placeholder="in Mbps" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="igst">GSTIN Number</label>
+                                                    <input type="text" class="form-control" id="igst" name="igst" required>
+                                                </div>
+
+
                                             </div>
                                         </div>
                                         <hr />

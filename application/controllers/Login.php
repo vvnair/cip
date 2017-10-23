@@ -8,6 +8,7 @@ class Login extends CI_Controller {
         $this->load->helper('url');
         $this->load->library('session');
         $this->load->model('register');
+        $this->load->helper('form');
         error_reporting(E_ALL & ~E_NOTICE);
     }
 
@@ -75,6 +76,10 @@ class Login extends CI_Controller {
         $session_data = $this->session->userdata();
         $users_data = $this->register->retrieve_users_requests();
         $view_data['data'] = $users_data;
+        $view_data['statuses'] = array('customer submitted',
+                                        'work in progress',
+                                        'feasible',
+                                        'unfeasible');
 
         $this->load->view('admin_profile_page',$view_data);
     }
@@ -85,13 +90,16 @@ class Login extends CI_Controller {
     }
 
     public function new_request(){
-        //echo "<pre>";print_r($this->input->post());exit;
+
         $insert_data = $this->input->post();
         $user_id = $insert_data['user_id'];
         $insert = $this->register->sr_request($insert_data);
+        $session_data = $this->session->userdata();
+        $user_data = $this->register->retrieve_user_requests($session_data['session_id']);
+        $view_data['data'] = $user_data;
 
         if($insert == true){
-            $this->load->view('profile_page');
+            $this->load->view('profile_page',$view_data);
         }
 
 
@@ -100,6 +108,25 @@ class Login extends CI_Controller {
     public function update_status(){
 
         $data = $this->input->post();
+
+        if(!$_FILES['proposal']['name'] == ''){
+            $config['upload_path']          = './uploads/';
+            $config['allowed_types']        = 'gif|jpg|png';
+            $config['max_size']             = 0;
+            $config['max_width']            = 1024;
+            $config['max_height']           = 768;
+
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            $this->upload->do_upload('proposal');
+            //$this->upload->display_errors();
+            $upload_data = $this->upload->data();
+            $this->register->upload_data($upload_data,$data['req_num']);
+            //echo "<pre>";print_r($upload_data);exit;
+        }
+
         $update = $this->register->update_status($data);
+
     }
 }

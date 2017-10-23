@@ -17,10 +17,22 @@ hr {
 }
 
 </style>
+<script>
+    $(document).ready(function(){
+        $('#status_select').change(function(){
+            var status = $(this).val();
+            if(status == 'feasible'){
+                $('.file_upload').show();
+            }else{
+                $('.file_upload').hide();
+            }
+        });
+    });
+</script>
 
 <?php $this->load->view('template/nav'); ?>
-<?php $six_digit_random_number = mt_rand(000000, 999999);
-    $request_number = "SR".$six_digit_random_number;
+<?php
+
     $date = date("Y-m-d");
     $session_data = $this->session->userdata();
     $user_id = $session_data['session_id'];
@@ -55,6 +67,7 @@ hr {
                                                         <th>User ID</th>
                                                         <th>Billing Address</th>
                                                         <th>Implementation Address</th>
+                                                        <th>Bandwidth</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                       </tr>
@@ -62,20 +75,26 @@ hr {
                                                     <tbody>
                                                     <?php foreach ($data as $key => $value) { ?>
                                                         <? //print_r($value); ?>
-                                                    <form method="post" action="http://localhost/cip/index.php/Login/update_status">
+                                                    <form method="post" action="http://localhost/cip/index.php/Login/update_status" enctype="multipart/form-data">
                                                      <tr>
                                                         <td><?php echo $key+1 ; ?></td>
                                                         <td><?php echo $value->request_number; ?></td>
                                                         <td><?php echo $value->user_id; ?></td>
-                                                        <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode; ?></td>
-                                                        <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
-                                                        <td><select name="status" class="form-control">
+                                                        <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode . " <br /> GSTIN No: " . $value->bgst ; ?></td>
+                                                        <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
+                                                        <td><?php echo $value->bandwidth; ?></td>
 
-                                                                <option value="Initiated">Initiated</option>
-                                                                <option value="wip">Work In Progress</option>
-                                                                <option value="resolved">Resolved</option>
-                                                                <option value="unresolved">Unresolved</option>
+                                                        <td><select name="status" class="form-control" id="status_select">
+                                                                <?php foreach ($statuses as $k => $v) { ?>
+                                                                    <option value="<?php echo $v; ?>" <?php if($v === $value->status){?> selected<?php } ?>><?php echo $v; ?></option>
+                                                                <?php } ?>
                                                             </select>
+                                                            <div class="file_upload" hidden >
+                                                                <div>
+                                                                <label for="proposal">Proposal : </label>
+                                                                <input type="file" name="proposal" size="20" class="btn btn-primary" id="proposal"/>
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                         <td><input type="hidden" name="req_num" value="<?php echo $value->request_number; ?>"/>
                                                             <input type="hidden" name="req_id" value="<?php echo $value->id; ?>"/>
