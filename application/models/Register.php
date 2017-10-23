@@ -146,5 +146,17 @@
 
             $this->db->insert('cip_uploads', $file_data);
         }
+
+        public function retrieve_upload_data($req_num){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $req_num);
+            $this->db->from('cip_uploads');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+        }
     }
 ?>

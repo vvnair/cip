@@ -94,6 +94,10 @@ hr {
                                                                 <label for="proposal">Proposal : </label>
                                                                 <input type="file" name="proposal" size="20" class="btn btn-primary" id="proposal"/>
                                                                 </div>
+                                                                <div>
+                                                                <label for="proposal">CAF : </label>
+                                                                <input type="file" name="caf" size="20" class="btn btn-primary" id="caf"/>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                         <td><input type="hidden" name="req_num" value="<?php echo $value->request_number; ?>"/>

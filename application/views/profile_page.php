@@ -59,13 +59,20 @@
                                                         </thead>
                                                         <tbody>
                                                         <?php foreach ($data as $key => $value) { ?>
-                                                            <? //print_r($value); ?>
+
                                                           <tr>
                                                             <td><?php echo $key+1 ; ?></td>
                                                             <td><?php echo $value->request_number; ?></td>
                                                             <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode; ?></td>
                                                             <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
-                                                            <td><?php echo $value->status;?></td>
+                                                            <td><?php echo $value->status;?>
+                                                                <?php if($value->status == 'feasible') {
+                                                                    foreach ($files as $k => $v) { ?>
+                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $v->fullpath; ?>">Downloads</a> </div>
+                                                                <?php    } ?>
+
+                                                                <?php } ?>
+                                                            </td>
                                                           </tr>
 
                                                         <?php } ?>

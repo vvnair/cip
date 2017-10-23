@@ -57,8 +57,17 @@ class Login extends CI_Controller {
         $this->session->set_userdata($arraydata);
         $session_data = $this->session->userdata();
         $user_data = $this->register->retrieve_user_requests($session_data['session_id']);
+        $upload_data = array();
+        foreach ($user_data as $key => $value) {
+            $sr_number = $value->request_number;
+            $upload_data = $this->register->retrieve_upload_data($sr_number);
+        }
+
         $view_data['data'] = $user_data;
-        //echo "<pre>";print_r($user_data);exit;
+        if($upload_data){
+            $view_data['files'] = $upload_data;
+        }
+
         $this->load->view('profile_page',$view_data);
 
 
@@ -109,24 +118,34 @@ class Login extends CI_Controller {
 
         $data = $this->input->post();
 
-        if(!$_FILES['proposal']['name'] == ''){
-            $config['upload_path']          = './uploads/';
-            $config['allowed_types']        = 'gif|jpg|png';
-            $config['max_size']             = 0;
-            $config['max_width']            = 1024;
-            $config['max_height']           = 768;
+        foreach($_FILES as $k => $file){
+            if(!$_FILES[$k]['name'] == ''){
+                $config['upload_path']          = './uploads/';
+                $config['allowed_types']        = '*';
+                $config['max_size']             = 10000;
+                $config['max_width']            = 1024;
+                $config['max_height']           = 768;
 
-            $this->load->library('upload', $config);
-            $this->upload->initialize($config);
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
 
-            $this->upload->do_upload('proposal');
-            //$this->upload->display_errors();
-            $upload_data = $this->upload->data();
-            $this->register->upload_data($upload_data,$data['req_num']);
-            //echo "<pre>";print_r($upload_data);exit;
+                $this->upload->do_upload($k);
+
+                $upload_data = $this->upload->data();
+                $this->register->upload_data($upload_data,$data['req_num']);
+            }
         }
 
         $update = $this->register->update_status($data);
 
+    }
+
+    public function download(){
+        $this->load->helper('download');
+
+        $get = $this->input->get();
+        $path= $get['p'];
+
+        force_download($path, NULL);
     }
 }
