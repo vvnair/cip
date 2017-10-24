@@ -23,7 +23,7 @@
         $request_number = "SR".$six_digit_random_number;
         $date = date("Y-m-d");
         $session_data = $this->session->userdata();
-        $user_id = $session_data['session_id'];
+        $user_id = $session_data['sessionid'];
 
     ?>
 
@@ -44,7 +44,7 @@
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <div class="tab-pane fade in active" id="tab1primary">
-                                        Welcome User
+
                                         <div class="row">
                                                 <div class="table">
                                                     <table class="table table-bordered">
@@ -55,6 +55,7 @@
                                                             <th>Billing Address</th>
                                                             <th>Implementation Address</th>
                                                             <th>Status</th>
+                                                            <th>Action</th>
                                                           </tr>
                                                         </thead>
                                                         <tbody>
@@ -62,17 +63,46 @@
 
                                                           <tr>
                                                             <td><?php echo $key+1 ; ?></td>
-                                                            <td><?php echo $value->request_number; ?></td>
+                                                            <td><strong><?php echo $value->request_number; ?></strong></td>
                                                             <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode; ?></td>
                                                             <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
-                                                            <td><?php echo $value->status;?>
+                                                            <td><strong><?php echo $value->status;?></strong>
                                                                 <?php if($value->status == 'feasible') {
                                                                     foreach ($files as $k => $v) { ?>
-                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $v->fullpath; ?>">Downloads</a> </div>
+                                                                        <?php foreach($v as $y => $z) {?>
+                                                                            <?php if($z->sr_request_number == $value->request_number) { ?>
+                                                                                <div><a class="btn btn-info" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php if($y == 0){?> Proposal <?php }else{ ?> CAF <?php } ?>  </a> </div>
+                                                                            <?php } ?>
+                                                                        <?php } ?>
                                                                 <?php    } ?>
 
                                                                 <?php } ?>
                                                             </td>
+                                                            <td>
+                                                                <?php if($value->status == 'feasible'){ ?>
+
+                                                                    <div>
+                                                                        <form action="http://localhost/cip/index.php/Login/change_proposal_status" method="post"><?    //   echo "<pre>";print_r($proposal_statuses ); ?>
+                                                                            <select name="proposal_status" class="form-control">
+                                                                                <?php //foreach($customer_proposal_status as $p => $m) { ?>
+                                                                                    <?php foreach ($proposal_statuses as $val) { ?>
+
+                                                                                        <option value="<?php echo $val; ?>" <?php if($m->proposal_status == $val){ ?> selected<?php } ?>><?php echo $val; ?></option>
+                                                                                    <?php// } ?>
+                                                                                <?php } ?>
+                                                                            </select>
+
+                                                                            <input type="hidden" name="sr_request_number" value="<?php echo $value->request_number; ?>"  />
+                                                                            <button type="submit" style="margin-top: 5px;" class="btn btn-success">Change Status</button>
+                                                                            <br /><br /><strong>Current Proposal Status : </strong><?php foreach($customer_proposal_status as $p => $m) {
+                                                                                if($m->sr_request_number == $value->request_number){
+                                                                                echo $m->proposal_status;
+                                                                            }} ?>
+                                                                        </form>
+                                                                    </div>
+
+                                                            <?php } ?>
+                                                            </td?
                                                           </tr>
 
                                                         <?php } ?>

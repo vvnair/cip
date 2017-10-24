@@ -19,12 +19,14 @@ hr {
 </style>
 <script>
     $(document).ready(function(){
-        $('#status_select').change(function(){
+        $('.status_select').change(function(){
+
             var status = $(this).val();
+            var id = $(this).attr("data-id");
             if(status == 'feasible'){
-                $('.file_upload').show();
+                $('.file_upload'+id).show();
             }else{
-                $('.file_upload').hide();
+                $('.file_upload'+id).hide();
             }
         });
     });
@@ -35,7 +37,7 @@ hr {
 
     $date = date("Y-m-d");
     $session_data = $this->session->userdata();
-    $user_id = $session_data['session_id'];
+    $user_id = $session_data['sessionid'];
 
 ?>
 
@@ -84,12 +86,21 @@ hr {
                                                         <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
                                                         <td><?php echo $value->bandwidth; ?></td>
 
-                                                        <td><select name="status" class="form-control" id="status_select">
+                                                        <td><select name="status" class="form-control status_select" data-id="<?php echo $value->request_number; ?>" >
                                                                 <?php foreach ($statuses as $k => $v) { ?>
                                                                     <option value="<?php echo $v; ?>" <?php if($v === $value->status){?> selected<?php } ?>><?php echo $v; ?></option>
                                                                 <?php } ?>
                                                             </select>
-                                                            <div class="file_upload" hidden >
+                                                            <?php if($customer_proposal_data) { ?>
+                                                                <div style = "margin-top : 10px;">
+                                                                    Customer Response on Proposal : <?php foreach ($customer_proposal_data as $key => $val) { ?>
+                                                                        <?php if($val->sr_request_number == $value->request_number){ ?>
+                                                                            <strong><?php echo $val->proposal_status; ?> </strong>
+                                                                        <?php } ?>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            <?php } ?>
+                                                            <div class="file_upload<?php echo $value->request_number;?>" " hidden >
                                                                 <div>
                                                                 <label for="proposal">Proposal : </label>
                                                                 <input type="file" name="proposal" size="20" class="btn btn-primary" id="proposal"/>

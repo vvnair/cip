@@ -158,5 +158,53 @@
 
             return $result;
         }
+        public function update_proposal_status($data){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $data['sr_request_number']);
+            $this->db->from('cip_proposal_status');
+            $query = $this->db->get();
+
+            if ( $query->num_rows() > 0 ) {
+                $update_data = array(
+                    'proposal_status' => $data['proposal_status']
+                );
+
+                  $this->db->where('sr_request_number',$data['sr_request_number']);
+                  $this->db->update('cip_proposal_status',$update_data);
+            } else {
+                $insert_data = array(
+                    'sr_request_number' => $data['sr_request_number'],
+                    'proposal_status' => $data['proposal_status']
+                );
+                $this->db->insert('cip_proposal_status',$insert_data);
+            }
+        }
+
+        public function retrieve_proposal_data($id){
+
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $id);
+            $this->db->from('cip_proposal_status');
+            $query = $this->db->get();
+            $result = $query->row();
+
+            return $result;
+        }
+
+        public function admin_retrieve_proposal_data(){
+
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->from('cip_proposal_status');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+        }
     }
 ?>
