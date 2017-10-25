@@ -10,6 +10,7 @@ class Login extends CI_Controller {
         $this->load->model('register');
         $this->load->helper('form');
         error_reporting(E_ALL & ~E_NOTICE);
+        ini_set('memory_limit', '1024M');
     }
 
 	public function index()
@@ -24,7 +25,6 @@ class Login extends CI_Controller {
 
     public function on_register()
     {
-
         $register_data = $this->input->post();
         $this->load->model('register');
         $this->register->register_into_db($register_data);
@@ -35,6 +35,11 @@ class Login extends CI_Controller {
     {
         $login_data = $this->input->post();
         $this->load->model('register');
+
+        $session_data =$this->session->userdata();
+        /*if($session_data['session_data']){
+                echo "yes";exit;
+        }*/
         $istrue = $this->register->usercheck($login_data);
         if($istrue['status'] == 200 && $istrue['admin'] == '0'){
             $this->profile($istrue['result']);
@@ -76,10 +81,8 @@ class Login extends CI_Controller {
         if($proposal_data) {
             $view_data['customer_proposal_status'] = $proposal_data;
         }
-
 //echo "<pre>";print_r($view_data);exit;
         $this->load->view('profile_page',$view_data);
-
 
     }
 
@@ -104,8 +107,8 @@ class Login extends CI_Controller {
                                         'work in progress',
                                         'feasible',
                                         'unfeasible');
-
-        $this->load->view('admin_profile_page',$view_data);
+        $this->do_login();
+        //$this->load->view('admin_profile_page',$view_data);
     }
 
     public function logout(){
@@ -121,11 +124,31 @@ class Login extends CI_Controller {
         $session_data = $this->session->userdata();
         $user_data = $this->register->retrieve_user_requests($session_data['sessionid']);
         $view_data['data'] = $user_data;
+        /*** Newly added to test on 25/10/2017 **/
+
+        $upload_data = array();
+        foreach ($user_data as $key => $value) {
+            $sr_number = $value->request_number;
+            $upload_data[] = $this->register->retrieve_upload_data($sr_number);
+            $proposal_data[] = $this->register->retrieve_proposal_data($sr_number);
+        }
+
+        if($upload_data){
+            $view_data['files'] = $upload_data;
+            $view_data['proposal_statuses'] = array('Proposal Read',
+                                            'Proposal Accepted');
+        }
+
+        if($proposal_data) {
+            $view_data['customer_proposal_status'] = $proposal_data;
+        }
+
+        /*****************************/
 
         if($insert == true){
-            //$this->load->view('profile_page',$view_data);
+            $this->load->view('profile_page',$view_data);
             //$this->profile($session_data);
-            redirect('Login/profile/'.$session_data);
+            //redirect('Login/profile/'.$session_data);
         }
 
 
@@ -154,6 +177,7 @@ class Login extends CI_Controller {
         }
 
         $update = $this->register->update_status($data);
+        $this->load->view('admin_profile_page',$view_data);
 
     }
 
