@@ -212,5 +212,33 @@ class Login extends CI_Controller {
         $data = $this->input->post();
         //echo "<pre>";print_r($data);exit;
         $update_status = $this->register->update_proposal_status($data);
+
+        /******** Need to be debugged ***/
+
+        $session_data = $this->session->userdata();
+        $user_data = $this->register->retrieve_user_requests($session_data['sessionid']);
+
+        $upload_data = array();
+        foreach ($user_data as $key => $value) {
+            $sr_number = $value->request_number;
+            $upload_data[] = $this->register->retrieve_upload_data($sr_number);
+            $proposal_data[] = $this->register->retrieve_proposal_data($sr_number);
+        }
+
+        $view_data['data'] = $user_data;
+        if($upload_data){
+            $view_data['files'] = $upload_data;
+            $view_data['proposal_statuses'] = array('Proposal Read',
+                                            'Proposal Accepted');
+        }
+
+        if($proposal_data) {
+            $view_data['customer_proposal_status'] = $proposal_data;
+        }
+
+        /******************************/
+
+        $this->load->view('profile_page',$view_data);
+
     }
 }
