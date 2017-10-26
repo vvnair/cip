@@ -10,7 +10,7 @@ class Login extends CI_Controller {
         $this->load->model('register');
         $this->load->helper('form');
         error_reporting(E_ALL & ~E_NOTICE);
-        ini_set('memory_limit', '1024M');
+
     }
 
 	public function index()
@@ -37,9 +37,10 @@ class Login extends CI_Controller {
         $this->load->model('register');
 
         $session_data =$this->session->userdata();
-        /*if($session_data['session_data']){
-                echo "yes";exit;
-        }*/
+        // if($session_data['session_data']){
+        //         echo "yes";exit;
+        // }
+        //print_r($session_data);exit;
         $istrue = $this->register->usercheck($login_data);
         if($istrue['status'] == 200 && $istrue['admin'] == '0'){
             $this->profile($istrue['result']);
@@ -107,8 +108,8 @@ class Login extends CI_Controller {
                                         'work in progress',
                                         'feasible',
                                         'unfeasible');
-        $this->do_login();
-        //$this->load->view('admin_profile_page',$view_data);
+        //$this->do_login();
+        $this->load->view('admin_profile_page',$view_data);
     }
 
     public function logout(){
@@ -177,6 +178,23 @@ class Login extends CI_Controller {
         }
 
         $update = $this->register->update_status($data);
+
+        /** To fix invalid argument **/
+
+        $session_data = $this->session->userdata();
+        $users_data = $this->register->retrieve_users_requests();
+        $proposal_data = $this->register->admin_retrieve_proposal_data();
+        $view_data['data'] = $users_data;
+        if($proposal_data){
+            $view_data['customer_proposal_data'] = $proposal_data;
+        }
+        //echo "<pre>";print_r($proposal_data);exit;
+        $view_data['statuses'] = array('customer submitted',
+                                        'work in progress',
+                                        'feasible',
+                                        'unfeasible');
+        /************************/
+
         $this->load->view('admin_profile_page',$view_data);
 
     }
