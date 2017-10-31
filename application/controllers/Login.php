@@ -63,27 +63,9 @@ class Login extends CI_Controller {
         }
 
         $session_data = $this->session->userdata();
-        $user_data = $this->register->retrieve_user_requests($session_data['sessionid']);
+        $page_data = $this->user_page_data($session_data['sessionid']);
 
-        $upload_data = array();
-        foreach ($user_data as $key => $value) {
-            $sr_number = $value->request_number;
-            $upload_data[] = $this->register->retrieve_upload_data($sr_number);
-            $proposal_data[] = $this->register->retrieve_proposal_data($sr_number);
-        }
-      //echo "<pre>";print_r($proposal_data);exit;
-        $view_data['data'] = $user_data;
-        if($upload_data){
-            $view_data['files'] = $upload_data;
-            $view_data['proposal_statuses'] = array('Proposal Read',
-                                            'Proposal Accepted');
-        }
-
-        if($proposal_data) {
-            $view_data['customer_proposal_status'] = $proposal_data;
-        }
-//echo "<pre>";print_r($view_data);exit;
-        $this->load->view('profile_page',$view_data);
+        $this->load->view('profile_page',$page_data);
 
     }
 
@@ -123,33 +105,11 @@ class Login extends CI_Controller {
         $user_id = $insert_data['user_id'];
         $insert = $this->register->sr_request($insert_data);
         $session_data = $this->session->userdata();
-        $user_data = $this->register->retrieve_user_requests($session_data['sessionid']);
-        $view_data['data'] = $user_data;
-        /*** Newly added to test on 25/10/2017 **/
 
-        $upload_data = array();
-        foreach ($user_data as $key => $value) {
-            $sr_number = $value->request_number;
-            $upload_data[] = $this->register->retrieve_upload_data($sr_number);
-            $proposal_data[] = $this->register->retrieve_proposal_data($sr_number);
-        }
-
-        if($upload_data){
-            $view_data['files'] = $upload_data;
-            $view_data['proposal_statuses'] = array('Proposal Read',
-                                            'Proposal Accepted');
-        }
-
-        if($proposal_data) {
-            $view_data['customer_proposal_status'] = $proposal_data;
-        }
-
-        /*****************************/
+        $page_data = $this->user_page_data($session_data['sessionid']);
 
         if($insert == true){
-            $this->load->view('profile_page',$view_data);
-            //$this->profile($session_data);
-            //redirect('Login/profile/'.$session_data);
+            $this->load->view('profile_page',$page_data);
         }
 
 
@@ -212,11 +172,16 @@ class Login extends CI_Controller {
         $data = $this->input->post();
         //echo "<pre>";print_r($data);exit;
         $update_status = $this->register->update_proposal_status($data);
-
-        /******** Need to be debugged ***/
-
         $session_data = $this->session->userdata();
-        $user_data = $this->register->retrieve_user_requests($session_data['sessionid']);
+        $page_data = $this->user_page_data($session_data['sessionid']);
+
+        $this->load->view('profile_page',$page_data);
+
+    }
+
+    public function user_page_data($id){
+
+        $user_data = $this->register->retrieve_user_requests($id);
 
         $upload_data = array();
         foreach ($user_data as $key => $value) {
@@ -236,9 +201,6 @@ class Login extends CI_Controller {
             $view_data['customer_proposal_status'] = $proposal_data;
         }
 
-        /******************************/
-
-        $this->load->view('profile_page',$view_data);
-
+        return $view_data;
     }
 }
