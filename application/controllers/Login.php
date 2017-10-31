@@ -79,19 +79,9 @@ class Login extends CI_Controller {
         );
         $this->session->set_userdata($arraydata);
         $session_data = $this->session->userdata();
-        $users_data = $this->register->retrieve_users_requests();
-        $proposal_data = $this->register->admin_retrieve_proposal_data();
-        $view_data['data'] = $users_data;
-        if($proposal_data){
-            $view_data['customer_proposal_data'] = $proposal_data;
-        }
-        //echo "<pre>";print_r($proposal_data);exit;
-        $view_data['statuses'] = array('customer submitted',
-                                        'work in progress',
-                                        'feasible',
-                                        'unfeasible');
-        //$this->do_login();
-        $this->load->view('admin_profile_page',$view_data);
+        $admin_page_data = $this->admin_page_data();
+
+        $this->load->view('admin_profile_page',$admin_page_data);
     }
 
     public function logout(){
@@ -139,23 +129,9 @@ class Login extends CI_Controller {
 
         $update = $this->register->update_status($data);
 
-        /** To fix invalid argument **/
-
         $session_data = $this->session->userdata();
-        $users_data = $this->register->retrieve_users_requests();
-        $proposal_data = $this->register->admin_retrieve_proposal_data();
-        $view_data['data'] = $users_data;
-        if($proposal_data){
-            $view_data['customer_proposal_data'] = $proposal_data;
-        }
-        //echo "<pre>";print_r($proposal_data);exit;
-        $view_data['statuses'] = array('customer submitted',
-                                        'work in progress',
-                                        'feasible',
-                                        'unfeasible');
-        /************************/
-
-        $this->load->view('admin_profile_page',$view_data);
+        $admin_page_data = $this->admin_page_data();
+        $this->load->view('admin_profile_page',$admin_page_data);
 
     }
 
@@ -201,6 +177,22 @@ class Login extends CI_Controller {
             $view_data['customer_proposal_status'] = $proposal_data;
         }
 
+        return $view_data;
+    }
+
+    public function admin_page_data(){
+
+        $users_data = $this->register->retrieve_users_requests();
+        $proposal_data = $this->register->admin_retrieve_proposal_data();
+        $view_data['data'] = $users_data;
+        if($proposal_data){
+            $view_data['customer_proposal_data'] = $proposal_data;
+        }
+        //echo "<pre>";print_r($proposal_data);exit;
+        $view_data['statuses'] = array('customer submitted',
+                                        'work in progress',
+                                        'feasible',
+                                        'unfeasible');
         return $view_data;
     }
 }
