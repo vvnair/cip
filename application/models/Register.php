@@ -45,6 +45,8 @@
                 }else{
                     $response['admin'] = "1";
                 }
+
+                $response['role'] = $result->role;
                 $response['result'] = $result;
             }else{
                 $response['status'] = "Error";
@@ -54,7 +56,7 @@
 
         }
 
-        public function sr_request($data){
+        public function sr_request($data, $company){
             $this->load->database();
             $insert_data = array(
                 'baddress1' => $data['baddress1'],
@@ -68,7 +70,7 @@
                 'iaddress2' => $data['iaddress2'],
                 'iaddress3' => $data['iaddress3'],
                 'icity' => $data['icity'],
-                'istate' => $data['icity'],
+                'istate' => $data['istate'],
                 'icountry' => $data['icountry'],
                 'izipcode' => $data['izipcode'],
                 'request_number' => $data['request_number'],
@@ -90,7 +92,8 @@
             $status_data = array(
                 'sr_request_id' => $insert_id,
                 'status' => 'customer submitted',
-                'sr_request_number' => $data['request_number']
+                'sr_request_number' => $data['request_number'],
+                'company_name' => $company
             );
 
             $this->db->insert('cip_sr_status', $status_data);
@@ -117,6 +120,22 @@
             $this->db->select('*');
             $this->db->from('cip_address');
             $this->db->join('cip_sr_status', 'cip_sr_status.sr_request_id = cip_address.id');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+        }
+
+        public function retrieve_companyusers_requests($company){
+
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->from('cip_address');
+            $this->db->join('cip_sr_status', 'cip_sr_status.sr_request_id = cip_address.id');
+            $this->db->join('cip_users', 'cip_users.company_name = cip_sr_status.company_name');
+            $array = array('cip_sr_status.company_name' => $company, 'cip_users.role' => 'customer');
+            $this->db->where($array);
             $query = $this->db->get();
             $result = $query->result();
 

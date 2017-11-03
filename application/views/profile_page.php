@@ -37,7 +37,8 @@
                             <div class="panel-heading">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab1primary" data-toggle="tab">Home</a></li>
-                                        <li><a href="#tab2primary" data-toggle="tab">New Request</a></li>
+                                        <li><a href="#tab2primary" data-toggle="tab">New Feasibility</a></li>
+                                        <li><a href="#tab3primary" data-toggle="tab">Upgrade Feasibility</a></li>
                                         <!-- <li><a href="#tab3primary" data-toggle="tab">Primary 3</a></li> -->
                                     </ul>
                             </div>

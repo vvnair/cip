@@ -40,12 +40,14 @@ class Login extends CI_Controller {
         // if($session_data['session_data']){
         //         echo "yes";exit;
         // }
-        //print_r($session_data);exit;
+        //echo "<pre>";print_r($session_data);exit;
         $istrue = $this->register->usercheck($login_data);
-        if($istrue['status'] == 200 && $istrue['admin'] == '0'){
+        if($istrue['status'] == 200 && $istrue['admin'] == '0' && $istrue['role'] == 'customer'){
             $this->profile($istrue['result']);
-        }elseif($istrue['status'] == 200 && $istrue['admin'] == '1'){
+        }elseif($istrue['status'] == 200 && $istrue['admin'] == '1' && $istrue['role'] == 'vendoradmin'){
             $this->admin_profile($istrue['result']);
+        }elseif($istrue['status'] == 200 && $istrue['role'] == 'customeradmin'){
+            $this->customer_admin_profile($istrue['result']);
         }else{
             redirect('','refresh');
         }
@@ -57,7 +59,8 @@ class Login extends CI_Controller {
                     'sessionid'  => $data->id,
                     'useremail'  => $data->email,
                     'username' => $data->name,
-                    'loggedin' => 1
+                    'loggedin' => 1,
+                    'companyname' => $data->company_name
             );
             $this->session->set_userdata($arraydata);
         }
@@ -70,18 +73,42 @@ class Login extends CI_Controller {
     }
 
     public function admin_profile($data){
-        $arraydata = array(
-                'sessionid'  => $data->id,
-                'useremail'  => $data->email,
-                'username' => $data->name,
-                'loggedin' => 1,
-                'isadmin' => 1
-        );
-        $this->session->set_userdata($arraydata);
+        if(empty($data->sessionid)){
+            $arraydata = array(
+                    'sessionid'  => $data->id,
+                    'useremail'  => $data->email,
+                    'username' => $data->name,
+                    'loggedin' => 1,
+                    'isadmin' => 1,
+                    'companyname' => $data->company_name
+            );
+
+            $this->session->set_userdata($arraydata);
+        }
         $session_data = $this->session->userdata();
         $admin_page_data = $this->admin_page_data();
 
         $this->load->view('admin_profile_page',$admin_page_data);
+    }
+
+    public function customer_admin_profile($data){
+        if(empty($data->sessionid)){
+            $arraydata = array(
+                    'sessionid'  => $data->id,
+                    'useremail'  => $data->email,
+                    'username' => $data->name,
+                    'loggedin' => 1,
+                    'isadmin' => 1,
+                    'companyname' => $data->company_name
+            );
+
+            $this->session->set_userdata($arraydata);
+        }
+        $session_data = $this->session->userdata();
+        $customeradmin_page_data = $this->customeradmin_page_data($session_data['companyname']); 
+
+        $this->load->view('customeradmin_profile_page',$customeradmin_page_data);
+
     }
 
     public function logout(){
@@ -91,9 +118,10 @@ class Login extends CI_Controller {
 
     public function new_request(){
 
+        $session_data = $this->session->userdata();
         $insert_data = $this->input->post();
         $user_id = $insert_data['user_id'];
-        $insert = $this->register->sr_request($insert_data);
+        $insert = $this->register->sr_request($insert_data, $session_data['companyname']);
         $session_data = $this->session->userdata();
 
         $page_data = $this->user_page_data($session_data['sessionid']);
@@ -170,7 +198,7 @@ class Login extends CI_Controller {
         if($upload_data){
             $view_data['files'] = $upload_data;
             $view_data['proposal_statuses'] = array('Proposal Read',
-                                            'Proposal Accepted');
+                                            'Proposal Read and Accepted');
         }
 
         if($proposal_data) {
@@ -194,5 +222,13 @@ class Login extends CI_Controller {
                                         'feasible',
                                         'unfeasible');
         return $view_data;
+    }
+
+    public function customeradmin_page_data($company){
+
+        $users_data = $this->register->retrieve_companyusers_requests($company);
+        $view_data['data'] = $users_data;
+        return $view_data;
+
     }
 }
