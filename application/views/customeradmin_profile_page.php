@@ -1,14 +1,22 @@
     <?php $this->load->view('template/header'); ?>
-    <link rel="stylesheet" type="text/css" href="<? echo base_url();?>/css/tab.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/css/tab.css">
+    <script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
+
     <style>
     .table {
         margin-left: 10px;
         margin-right: 10px;
         width: 98%;
     }
-
-
     </style>
+    <script>
+        $(document).ready(function(){
+            $("#print").on("click", function(){
+                $('#customeradmintable').tableToCSV();
+            });
+        });
+
+    </script>
 
     <?php $this->load->view('template/nav'); ?>
 
@@ -22,6 +30,7 @@
                             <div class="panel-heading">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab1primary" data-toggle="tab">Home</a></li>
+
                                     </ul>
                             </div>
                             <div class="panel-body">
@@ -29,8 +38,9 @@
                                     <div class="tab-pane fade in active" id="tab1primary">
 
                                         <div class="row">
+                                                <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Print</button>
                                                 <div class="table">
-                                                    <table class="table table-bordered">
+                                                    <table class="table table-bordered" id="customeradmintable">
                                                         <thead>
                                                           <tr>
                                                             <th>No</th>
@@ -40,7 +50,6 @@
                                                             <th>Implementation Address</th>
                                                             <th>Bandwidth</th>
                                                             <th>Status</th>
-
                                                           </tr>
                                                         </thead>
                                                         <tbody>
