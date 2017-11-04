@@ -9,6 +9,7 @@
             $this->load->model('register');
             $this->load->library('upload');
             $this->load->helper('form');
+            $this->load->library('email');
             error_reporting(E_ALL & ~E_NOTICE);
         }
 

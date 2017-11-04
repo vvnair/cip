@@ -235,6 +235,30 @@
                                         </div>
                                     </form>
                                 </div>
+                                <div class="tab-pane fade" id="tab3primary">
+                                    <div class="row">
+                                            <div class="table">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>No</th>
+                                                        <th>SR Number</th>
+                                                        <th>Action</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach ($data as $key => $value) { print_r($value);?>
+                                                            <tr>
+                                                                <td><?php echo $key+1; ?></td>
+                                                                <td><?php echo $value->request_number; ?></td>
+                                                                <td><button class="btn btn-success">Edit</button></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                </div>
                                 <!-- New Request tab ends here         -->
                                     </div>
                                     <!-- <div class="tab-pane fade" id="tab3primary">Primary 3</div> -->

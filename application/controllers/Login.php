@@ -9,6 +9,7 @@ class Login extends CI_Controller {
         $this->load->library('session');
         $this->load->model('register');
         $this->load->helper('form');
+        $this->load->library('email');
         error_reporting(E_ALL & ~E_NOTICE);
 
     }
@@ -25,12 +26,52 @@ class Login extends CI_Controller {
 
     public function on_register()
     {
-        $register_data = $this->input->post();
+        $register_data = $this->input->post();print_r($register_data);exit;
         $this->load->model('register');
         $this->register->register_into_db($register_data);
+        $this->sendmail_admin($register_data);
+        $this->sendmail_customer($register_data);
         $this->index();
     }
 
+    public function sendmail_admin($data){
+        $mail['text'] = "A new user has registered in CIP with email id :".$data['email'].". Please verify the user and assign a role.";
+        $mail['email'] = "cipvendor2017@gmail.com";
+
+        $mail['subject'] = "New User Registered";
+    }
+
+    public function sendmail_customer($data){
+        $mail['text'] = "Hello ".$data['name']. "Thank you for registering in the CIP. You will be able to login only after you have been verified by the administrator. We will let you know once action has been taken. Thank you";
+        $mail['email'] = $data['email'];
+        $mail['subject'] = "Welcome";
+
+        $this->sendmail($mail);
+    }
+
+    public function sendmail($data){
+
+        $config = Array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'cipvendor2017@gmail.com',
+            'smtp_pass' => '2017vendorcip',
+            'mailtype'  => 'html',
+            'charset'   => 'iso-8859-1'
+        );
+
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+
+        $this->email->from('cipvendor2017@gmail.com', 'Administrator');
+        $this->email->to($data['email']);
+
+        $this->email->subject($data['subject']);
+        $this->email->message($data['text']);
+
+        $result = $this->email->send();
+    }
     public function do_login()
     {
         $login_data = $this->input->post();
