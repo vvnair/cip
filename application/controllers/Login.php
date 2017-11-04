@@ -105,7 +105,7 @@ class Login extends CI_Controller {
             $this->session->set_userdata($arraydata);
         }
         $session_data = $this->session->userdata();
-        $customeradmin_page_data = $this->customeradmin_page_data($session_data['companyname']); 
+        $customeradmin_page_data = $this->customeradmin_page_data($session_data['companyname']);
 
         $this->load->view('customeradmin_profile_page',$customeradmin_page_data);
 
@@ -137,6 +137,8 @@ class Login extends CI_Controller {
 
         $data = $this->input->post();
 
+        $check_files = $this->register->check_uploads($data);
+
         foreach($_FILES as $k => $file){
             if(!$_FILES[$k]['name'] == ''){
                 $config['upload_path']          = './uploads/';
@@ -151,7 +153,13 @@ class Login extends CI_Controller {
                 $this->upload->do_upload($k);
 
                 $upload_data = $this->upload->data();
-                $this->register->upload_data($upload_data,$data['req_num']);
+                $upload_data['type'] = $k;
+
+                if($check_files){
+                    $this->register->update_upload_data($upload_data,$data['req_num']);
+                }else{
+                    $this->register->upload_data($upload_data,$data['req_num']);
+                }
             }
         }
 

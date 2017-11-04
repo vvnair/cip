@@ -160,10 +160,26 @@
                 'filename' => $data['file_name'],
                 'filepath' => $data['file_path'],
                 'sr_request_number' => $id,
-                'fullpath' => $data['full_path']
+                'fullpath' => $data['full_path'],
+                'type' => $data['type']
             );
 
             $this->db->insert('cip_uploads', $file_data);
+        }
+
+        public function update_upload_data($data,$id){
+            $this->load->database();
+
+            $file_data = array(
+                'filename' => $data['file_name'],
+                'filepath' => $data['file_path'],
+                'fullpath' => $data['full_path'],
+                );
+
+            $array = array('sr_request_number' => $id, 'type' => $data['type']);
+            $this->db->where($array);
+            $this->db->update('cip_uploads',$file_data);
+
         }
 
         public function retrieve_upload_data($req_num){
@@ -177,6 +193,25 @@
 
             return $result;
         }
+
+        public function check_uploads($data){
+
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $data['req_num']);
+            $this->db->from('cip_uploads');
+            $query = $this->db->get();
+            $result = $query->result();
+            $count = count($result);
+            if($count == 2){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+
         public function update_proposal_status($data){
             $this->load->database();
 
