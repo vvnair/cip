@@ -13,6 +13,31 @@
             error_reporting(E_ALL & ~E_NOTICE);
         }
 
+        public function get_user_roles(){
+
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where_not_in('role', 'vendoradmin');
+            $this->db->from('cip_users');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+        }
+
+        public function update_role($data){
+
+            $this->load->database();
+            $update_data = array(
+                'role' => $data['role'],
+            );
+
+            $this->db->where('id', $data['user_id']);
+            $this->db->update('cip_users', $update_data);
+
+        }
+
         public function register_into_db($data)
         {
             $this->load->database();

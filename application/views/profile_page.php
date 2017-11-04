@@ -47,7 +47,7 @@
                                     <div class="tab-pane fade in active" id="tab1primary">
 
                                         <div class="row">
-                                                <div class="table">
+                                                <div class="table table-responsive">
                                                     <table class="table table-bordered">
                                                         <thead>
                                                           <tr>
@@ -72,7 +72,7 @@
                                                                     foreach ($files as $k => $v) { ?>
                                                                         <?php foreach($v as $y => $z) {?>
                                                                             <?php if($z->sr_request_number == $value->request_number) { ?>
-                                                                                <div><a class="btn btn-info" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php if($y == 0){?> Proposal <?php }else{ ?> CAF <?php } ?>  </a> </div>
+                                                                                <div><a class="btn btn-info" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php if($y == 0){?> Download Proposal <?php }else{ ?> Download CAF <?php } ?>  </a> </div>
                                                                             <?php } ?>
                                                                         <?php } ?>
                                                                 <?php    } ?>

@@ -26,7 +26,7 @@ class Login extends CI_Controller {
 
     public function on_register()
     {
-        $register_data = $this->input->post();print_r($register_data);exit;
+        $register_data = $this->input->post();
         $this->load->model('register');
         $this->register->register_into_db($register_data);
         $this->sendmail_admin($register_data);
@@ -261,15 +261,23 @@ class Login extends CI_Controller {
 
         $users_data = $this->register->retrieve_users_requests();
         $proposal_data = $this->register->admin_retrieve_proposal_data();
+        $users_role = $this->register->get_user_roles();
         $view_data['data'] = $users_data;
         if($proposal_data){
             $view_data['customer_proposal_data'] = $proposal_data;
+        }
+        if($users_role){
+            $view_data['user_roles'] = $users_role;
         }
         //echo "<pre>";print_r($proposal_data);exit;
         $view_data['statuses'] = array('customer submitted',
                                         'work in progress',
                                         'feasible',
                                         'unfeasible');
+        $view_data['roles'] = array('vendoradmin',
+                                        'customeradmin',
+                                        'customer',
+                                    );
         return $view_data;
     }
 
@@ -279,5 +287,13 @@ class Login extends CI_Controller {
         $view_data['data'] = $users_data;
         return $view_data;
 
+    }
+
+    public function update_user_role(){
+
+        $data = $this->input->post();
+        $update = $this->register->update_role($data);
+
+        redirect('http://localhost/cip/index.php/Login/do_login','refresh');
     }
 }

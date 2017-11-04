@@ -51,7 +51,7 @@ hr {
                         <div class="panel-heading">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#tab1primary" data-toggle="tab">Home</a></li>
-                                    <!-- <li><a href="#tab2primary" data-toggle="tab">New Request</a></li> -->
+                                    <li><a href="#tab2primary" data-toggle="tab">User Management</a></li>
                                     <!-- <li><a href="#tab3primary" data-toggle="tab">Primary 3</a></li> -->
                                 </ul>
                         </div>
@@ -129,7 +129,41 @@ hr {
                                 </div>
                                 <!-- New Request tab starts here -->
                                 <div class="tab-pane fade" id="tab2primary">
-
+                                    <div class="row">
+                                            <div class="table">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>No</th>
+                                                        <th>User ID</th>
+                                                        <th>Name</th>
+                                                        <th>Role</th>
+                                                        <th>Action</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach($user_roles as $k => $v){ ?>
+                                                        <form action ="http://localhost/cip/index.php/Login/update_user_role" method="post">
+                                                            <tr>
+                                                                <td><?php echo $k+1; ?></td>
+                                                                <td><?php echo $v->id; ?></td>
+                                                                <td><?php echo $v->name ?></td>
+                                                                <td>
+                                                                    <select class="form-control" name="role">
+                                                                        <?php foreach($roles as $role) { ?>
+                                                                            <option value="<? echo $role; ?>" <?php if($role == $v->role) {?>selected <?php }?>><? echo $role; ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <input type="hidden" name="user_id" value="<?php echo $v->id; ?>"/>
+                                                                <td><button type="submit" class="btn btn-primary">Change</button></td>
+                                                            </tr>
+                                                        </form>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
                                 </div>
                             <!-- New Request tab ends here         -->
                                 </div>
