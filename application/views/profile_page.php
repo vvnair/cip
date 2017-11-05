@@ -8,7 +8,7 @@
 
     .table {
         margin-left: 10px;
-        margin-right: 10px;
+        margin-right: 20%;
         width: 98%;
     }
 
@@ -17,6 +17,16 @@
     }
 
     </style>
+    <script>
+        $(document).ready(function(){
+            var name = $('#comp_name option:selected').text();
+            $('#comp_text').html(name);
+            $( "#comp_name" ).change(function() {
+                var name = $('#comp_name option:selected').text();
+                $('#comp_text').html(name);
+            });
+        });
+    </script>
 
     <?php $this->load->view('template/nav'); ?>
     <?php $six_digit_random_number = mt_rand(000000, 999999);
@@ -117,6 +127,25 @@
                                     <div class="tab-pane fade" id="tab2primary">
 
                                     <form method="post" action="http://localhost/cip/index.php/Login/new_request">
+                                        <div class="row">
+                                            <div class="col-sm-6 billing" >
+                                                <div class="form-group">
+                                                    <label for="company">Select Company</label>
+                                                    <select name="company" class="form-control" style="width:70%;" id="comp_name" >
+                                                        <?php foreach ($user_companies as $p => $company) { ?>
+                                                            <option value="<?php echo $company->id; ?>"><?php echo $company->company; ?></option>
+                                                        <?php } ?>
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 billing">
+                                                <label for="company">Company : </label>
+                                                <div id="comp_text"></div>
+                                            </div>
+                                        </div>
+                                        <hr />
                                         <div class="row ">
                                             <div class="col-sm-6 billing" >
                                                 <h4>Billing Address</h4>

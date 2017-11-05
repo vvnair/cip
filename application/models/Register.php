@@ -36,6 +36,59 @@
             $this->db->where('id', $data['user_id']);
             $this->db->update('cip_users', $update_data);
 
+            $this->db->select('*');
+            $this->db->where('user_id', $data['user_id']);
+            $this->db->from('cip_company_users');
+            $query = $this->db->get();
+            if ( $query->num_rows() > 0 ) {
+                $this->db->where('user_id', $data['user_id']);
+                $this->db->delete('cip_company_users');
+
+                foreach($data['company'] as $k => $v) {
+                    $insert_data = array(
+                        'company' => $v,
+                        'user_id' => $data['user_id']
+                    );
+                    $this->db->insert('cip_company_users', $insert_data);
+                }
+
+            }else{
+                $count = count($data['company']);
+                foreach($data['company'] as $k => $v) {
+                    $insert_data = array(
+                        'company' => $v,
+                        'user_id' => $data['user_id']
+                    );
+                    $this->db->insert('cip_company_users', $insert_data);
+                }
+
+            }
+
+        }
+
+        public function get_company_users(){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->join('cip_companies', 'cip_companies.id = cip_company_users.company');
+            $this->db->from('cip_company_users');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+        }
+
+        public function get_company_user($id){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->join('cip_companies', 'cip_companies.id = cip_company_users.company');
+            $this->db->where('cip_company_users.user_id', $id);
+            $this->db->from('cip_company_users');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
         }
 
         public function register_into_db($data)
@@ -49,6 +102,31 @@
             );
 
             $this->db->insert('cip_users', $insert_data);
+
+        }
+
+        public function add_company($data)
+        {
+            $this->load->database();
+            $insert_data = array(
+                'company' => $data['company']
+            );
+
+            $this->db->insert('cip_companies', $insert_data);
+
+        }
+
+        public function get_companies()
+        {
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->from('cip_companies');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+
 
         }
 
@@ -146,6 +224,7 @@
             $this->db->select('*');
             $this->db->from('cip_address');
             $this->db->join('cip_sr_status', 'cip_sr_status.sr_request_id = cip_address.id');
+            $this->db->join('cip_users', 'cip_users.id = cip_address.user_id');
             $query = $this->db->get();
             $result = $query->result();
 

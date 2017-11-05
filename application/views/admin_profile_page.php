@@ -51,7 +51,8 @@ hr {
                         <div class="panel-heading">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#tab1primary" data-toggle="tab">Home</a></li>
-                                    <li><a href="#tab2primary" data-toggle="tab">User Management</a></li>
+                                    <li><a href="#tab2primary" data-toggle="tab">Companies</a></li>
+                                    <li><a href="#tab3primary" data-toggle="tab">User Management</a></li>
                                     <!-- <li><a href="#tab3primary" data-toggle="tab">Primary 3</a></li> -->
                                 </ul>
                         </div>
@@ -81,7 +82,7 @@ hr {
                                                      <tr>
                                                         <td><?php echo $key+1 ; ?></td>
                                                         <td><?php echo $value->request_number; ?></td>
-                                                        <td><?php echo $value->user_id; ?></td>
+                                                        <td><?php echo $value->email; ?></td>
                                                         <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode . " <br /> GSTIN No: " . $value->bgst ; ?></td>
                                                         <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
                                                         <td><?php echo $value->bandwidth; ?></td>
@@ -113,7 +114,7 @@ hr {
                                                         </td>
                                                         <td><input type="hidden" name="req_num" value="<?php echo $value->request_number; ?>"/>
                                                             <input type="hidden" name="req_id" value="<?php echo $value->id; ?>"/>
-                                                            <button type="submit" class="btn btn-success">Change</button>
+                                                            <button type="submit" class="btn btn-success">Update</button>
 
                                                         </td>
                                                       </tr>
@@ -128,7 +129,7 @@ hr {
                                     </div>
                                 </div>
                                 <!-- New Request tab starts here -->
-                                <div class="tab-pane fade" id="tab2primary">
+                                <div class="tab-pane fade" id="tab3primary">
                                     <div class="row">
                                             <div class="table">
                                                 <table class="table table-bordered">
@@ -138,6 +139,7 @@ hr {
                                                         <th>User ID</th>
                                                         <th>Name</th>
                                                         <th>Role</th>
+                                                        <th>Company</th>
                                                         <th>Action</th>
                                                       </tr>
                                                     </thead>
@@ -156,7 +158,16 @@ hr {
                                                                     </select>
                                                                 </td>
                                                                 <input type="hidden" name="user_id" value="<?php echo $v->id; ?>"/>
-                                                                <td><button type="submit" class="btn btn-primary">Change</button></td>
+                                                                <td>
+                                                                    <select name="company[]" multiple class="form-control">
+                                                                        <?php foreach($companies as $k  => $c){ ?>
+                                                                            <option value="<?php echo $c->id;?>" <?php foreach($cmp_users as $key => $val){
+                                                                                    if($val->id == $c->id && $val->user_id == $v->id) { ?> selected <?php
+                                                                             } }?> ><?php echo $c->company;?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td><button type="submit" class="btn btn-primary">Update</button></td>
                                                             </tr>
                                                         </form>
                                                         <?php } ?>
@@ -165,9 +176,48 @@ hr {
                                             </div>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane fade" id="tab2primary">
+                                    <?php if(!empty($companies)) { ?>
+                                    <div class="row">
+                                            <div class="table">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>No</th>
+
+                                                        <th>Company</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach($companies as $key => $val) { ?>
+                                                        <tr>
+                                                            <td><?php echo $key+1; ?></td>
+                                                            <td><?php echo $val->company; ?></td>
+                                                        </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
+                                    <?php } ?>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <form action="http://localhost/cip/index.php/Login/add_company" method="post">
+                                              <div class="form-group">
+                                                <label for="company">Company Name</label>
+                                                <input type="text" class="form-control" name="company" style="width: 40%;">
+                                              </div>
+
+                                              <button type="submit" class="btn btn-primary">Add Company</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
                             <!-- New Request tab ends here         -->
                                 </div>
-                                <!-- <div class="tab-pane fade" id="tab3primary">Primary 3</div> -->
+                                <!-- <div class="tab-pane fade" id="tab2primary">Primary 3</div> -->
                             </div>
                         </div>
                     </div>

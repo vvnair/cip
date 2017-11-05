@@ -212,6 +212,10 @@ class Login extends CI_Controller {
 
     }
 
+    public function add_company(){
+        $data = $this->input->post();
+        $insert = $this->register->add_company($data);
+    }
     public function download(){
         $this->load->helper('download');
 
@@ -235,6 +239,7 @@ class Login extends CI_Controller {
     public function user_page_data($id){
 
         $user_data = $this->register->retrieve_user_requests($id);
+        $get_user_companies = $this->register->get_company_user($id);
 
         $upload_data = array();
         foreach ($user_data as $key => $value) {
@@ -242,7 +247,9 @@ class Login extends CI_Controller {
             $upload_data[] = $this->register->retrieve_upload_data($sr_number);
             $proposal_data[] = $this->register->retrieve_proposal_data($sr_number);
         }
-
+        if($get_user_companies){
+            $view_data['user_companies'] = $get_user_companies;
+        }
         $view_data['data'] = $user_data;
         if($upload_data){
             $view_data['files'] = $upload_data;
@@ -262,12 +269,21 @@ class Login extends CI_Controller {
         $users_data = $this->register->retrieve_users_requests();
         $proposal_data = $this->register->admin_retrieve_proposal_data();
         $users_role = $this->register->get_user_roles();
+        $get_companies = $this->register->get_companies();
+        $get_company_users = $this->register->get_company_users();
+        //echo "<pre>";print_r($users_data);exit;
         $view_data['data'] = $users_data;
         if($proposal_data){
             $view_data['customer_proposal_data'] = $proposal_data;
         }
         if($users_role){
             $view_data['user_roles'] = $users_role;
+        }
+        if($get_companies){
+            $view_data['companies'] = $get_companies;
+        }
+        if($get_company_users){
+            $view_data['cmp_users'] = $get_company_users;
         }
         //echo "<pre>";print_r($proposal_data);exit;
         $view_data['statuses'] = array('customer submitted',
@@ -291,7 +307,7 @@ class Login extends CI_Controller {
 
     public function update_user_role(){
 
-        $data = $this->input->post();
+        $data = $this->input->post();//echo "<pre>";print_r($data);print_r(count($data['company']));exit;
         $update = $this->register->update_role($data);
 
         redirect('http://localhost/cip/index.php/Login/do_login','refresh');
