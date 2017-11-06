@@ -28,6 +28,21 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function(){
+            $('.select_action').change(function(){
+
+                var status = $(this).val();
+                var id = $(this).attr("data-id");
+                if(status == 'Proposal Accepted'){
+                    $('.file_upload'+id).show();
+                }else{
+                    $('.file_upload'+id).hide();
+                }
+            });
+        });
+    </script>
+
     <?php $this->load->view('template/nav'); ?>
     <?php $six_digit_random_number = mt_rand(000000, 999999);
         $request_number = "SR".$six_digit_random_number;
@@ -77,12 +92,12 @@
                                                             <td><strong><?php echo $value->request_number; ?></strong></td>
                                                             <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode; ?></td>
                                                             <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
-                                                            <td><strong><?php echo $value->status;?></strong>
+                                                            <td><strong><?php echo ucfirst($value->status);?></strong>
                                                                 <?php if($value->status == 'feasible') {
                                                                     foreach ($files as $k => $v) { ?>
                                                                         <?php foreach($v as $y => $z) {?>
                                                                             <?php if($z->sr_request_number == $value->request_number) { ?>
-                                                                                <div><a class="btn btn-info" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php if($y == 0){?> Download Proposal <?php }else{ ?> Download CAF <?php } ?>  </a> </div>
+                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div>
                                                                             <?php } ?>
                                                                         <?php } ?>
                                                                 <?php    } ?>
@@ -93,8 +108,8 @@
                                                                 <?php if($value->status == 'feasible'){ ?>
 
                                                                     <div>
-                                                                        <form action="http://localhost/cip/index.php/Login/change_proposal_status" method="post"><?    //   echo "<pre>";print_r($proposal_statuses ); ?>
-                                                                            <select name="proposal_status" class="form-control">
+                                                                        <form action="http://localhost/cip/index.php/Login/change_proposal_status" method="post" enctype="multipart/form-data"><?    //   echo "<pre>";print_r($proposal_statuses ); ?>
+                                                                            <select name="proposal_status" class="form-control select_action" data-id="<?php echo $value->request_number; ?>">
                                                                                 <?php //foreach($customer_proposal_status as $p => $m) { ?>
                                                                                     <?php foreach ($proposal_statuses as $val) { ?>
 
@@ -104,6 +119,18 @@
                                                                             </select>
 
                                                                             <input type="hidden" name="sr_request_number" value="<?php echo $value->request_number; ?>"  />
+                                                                            <input type="hidden" name="user_id" value="<?php echo $user_id; ?>"/>
+                                                                            <div class="file_upload<?php echo $value->request_number;?>" " hidden >
+                                                                                <div>
+                                                                                <label for="signedproposal">Proposal : </label>
+                                                                                <input type="file" name="signedproposal" size="20" class="btn btn-primary" id="signedproposal"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                <label for="signedcaf">Signed CAF : </label>
+                                                                                <input type="file" name="signedcaf" size="20" class="btn btn-primary" id="signedcaf"/>
+                                                                                </div>
+                                                                            </div>
+
                                                                             <button type="submit" style="margin-top: 5px;" class="btn btn-success">Change Status</button>
                                                                             <br /><br /><strong>Current Proposal Status : </strong><?php foreach($customer_proposal_status as $p => $m) {
                                                                                 if($m->sr_request_number == $value->request_number){

@@ -177,16 +177,17 @@ class Login extends CI_Controller {
     public function update_status(){
 
         $data = $this->input->post();
-
         $check_files = $this->register->check_uploads($data);
 
         foreach($_FILES as $k => $file){
             if(!$_FILES[$k]['name'] == ''){
+                $filename = $k."-".$data['req_num'].".pdf";
                 $config['upload_path']          = './uploads/';
                 $config['allowed_types']        = '*';
                 $config['max_size']             = 10000;
                 $config['max_width']            = 1024;
                 $config['max_height']           = 768;
+                $config['file_name'] = $filename;
 
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
@@ -227,7 +228,36 @@ class Login extends CI_Controller {
 
     public function change_proposal_status(){
         $data = $this->input->post();
-        //echo "<pre>";print_r($data);exit;
+
+        $check_files = $this->register->check_customer_uploads($data);
+
+        foreach($_FILES as $k => $file){
+            if(!$_FILES[$k]['name'] == ''){
+                $filename = $k."-".$data['sr_request_number'].".pdf";
+                $config['upload_path']          = './uploads/';
+                $config['allowed_types']        = '*';
+                $config['max_size']             = 10000;
+                $config['max_width']            = 1024;
+                $config['max_height']           = 768;
+                $config['file_name'] = $filename;
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+
+                $this->upload->do_upload($k);
+
+                $upload_data = $this->upload->data();
+                $upload_data['type'] = $k;
+
+                if($check_files){
+                    $this->register->customer_update_upload_data($upload_data,$data);
+                }else{
+                    $this->register->customer_upload_data($upload_data,$data);
+                }
+            }
+        }
+
+
         $update_status = $this->register->update_proposal_status($data);
         $session_data = $this->session->userdata();
         $page_data = $this->user_page_data($session_data['sessionid']);
@@ -251,10 +281,12 @@ class Login extends CI_Controller {
             $view_data['user_companies'] = $get_user_companies;
         }
         $view_data['data'] = $user_data;
+        $view_data['user_id'] = $id;
         if($upload_data){
             $view_data['files'] = $upload_data;
-            $view_data['proposal_statuses'] = array('Proposal Read',
-                                            'Proposal Read and Accepted');
+            $view_data['proposal_statuses'] = array('Proposal Unread',
+                                                    'Proposal Read',
+                                                    'Proposal Accepted');
         }
 
         if($proposal_data) {
@@ -270,9 +302,16 @@ class Login extends CI_Controller {
         $proposal_data = $this->register->admin_retrieve_proposal_data();
         $users_role = $this->register->get_user_roles();
         $get_companies = $this->register->get_companies();
+
         $get_company_users = $this->register->get_company_users();
-        //echo "<pre>";print_r($users_data);exit;
+
         $view_data['data'] = $users_data;
+        foreach ($users_data as $key => $value) {
+            $upload_data[] = $this->register->retrieve_customer_upload_data($value->user_id,$value->sr_request_number);
+        }
+        if($upload_data){
+            $view_data['files'] = $upload_data;
+        }
         if($proposal_data){
             $view_data['customer_proposal_data'] = $proposal_data;
         }
@@ -285,6 +324,7 @@ class Login extends CI_Controller {
         if($get_company_users){
             $view_data['cmp_users'] = $get_company_users;
         }
+        //echo "<pre>";print_r($upload_data);exit;
         //echo "<pre>";print_r($proposal_data);exit;
         $view_data['statuses'] = array('customer submitted',
                                         'work in progress',

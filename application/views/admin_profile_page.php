@@ -73,18 +73,19 @@ hr {
                                                         <th>Bandwidth</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
+                                                        <th>Documents Uploaded till Date </th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
                                                     <?php foreach ($data as $key => $value) { ?>
-                                                        <? //print_r($value); ?>
+
                                                     <form method="post" action="http://localhost/cip/index.php/Login/update_status" enctype="multipart/form-data">
                                                      <tr>
                                                         <td><?php echo $key+1 ; ?></td>
                                                         <td><?php echo $value->request_number; ?></td>
                                                         <td><?php echo $value->email; ?></td>
-                                                        <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode . " <br /> GSTIN No: " . $value->bgst ; ?></td>
-                                                        <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
+                                                        <td><?php echo  $value->company."<br />".$value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode . " <br /> GSTIN No: " . $value->bgst ; ?></td>
+                                                        <td><?php echo $value->company."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
                                                         <td><?php echo $value->bandwidth; ?></td>
 
                                                         <td><select name="status" class="form-control status_select" data-id="<?php echo $value->request_number; ?>" >
@@ -92,11 +93,15 @@ hr {
                                                                     <option value="<?php echo $v; ?>" <?php if($v === $value->status){?> selected<?php } ?>><?php echo $v; ?></option>
                                                                 <?php } ?>
                                                             </select>
-                                                            <?php if($customer_proposal_data) { ?>
+                                                            <?php $stats = "";
+                                                                if($customer_proposal_data) { ?>
                                                                 <div style = "margin-top : 10px;">
                                                                     Customer Response on Proposal : <?php foreach ($customer_proposal_data as $key => $val) { ?>
                                                                         <?php if($val->sr_request_number == $value->request_number){ ?>
-                                                                            <strong><?php echo $val->proposal_status; ?> </strong>
+                                                                            <strong><?php echo $val->proposal_status;
+                                                                                    $stats = $val->proposal_status;
+                                                                                     ?>
+                                                                            </strong>
                                                                         <?php } ?>
                                                                     <?php } ?>
                                                                 </div>
@@ -116,6 +121,15 @@ hr {
                                                             <input type="hidden" name="req_id" value="<?php echo $value->id; ?>"/>
                                                             <button type="submit" class="btn btn-success">Update</button>
 
+                                                        </td>
+                                                        <td>
+
+                                                            <?php if($stats == 'Proposal Accepted') {
+
+                                                                foreach($files as $k => $file){
+                                                                    foreach($file as $y => $z) {?>
+                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div>
+                                                            <?php }}} ?>
                                                         </td>
                                                       </tr>
 

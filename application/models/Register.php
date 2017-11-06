@@ -186,7 +186,8 @@
                 'localcontactemail' => $data['localcontactemail'],
                 'igst' => $data['igst'],
                 'bgst' => $data['bgst'],
-                'bandwidth' => $data['bandwidth']
+                'bandwidth' => $data['bandwidth'],
+                'company' => $data['company']
 
             );
 
@@ -212,6 +213,7 @@
             $this->db->where('user_id', $user_id);
             $this->db->from('cip_address');
             $this->db->join('cip_sr_status', 'cip_sr_status.sr_request_id = cip_address.id');
+            $this->db->join('cip_companies','cip_companies.id = cip_address.company');
             $query = $this->db->get();
             $result = $query->result();
 
@@ -225,6 +227,7 @@
             $this->db->from('cip_address');
             $this->db->join('cip_sr_status', 'cip_sr_status.sr_request_id = cip_address.id');
             $this->db->join('cip_users', 'cip_users.id = cip_address.user_id');
+            $this->db->join('cip_companies','cip_companies.id = cip_address.company');
             $query = $this->db->get();
             $result = $query->result();
 
@@ -272,6 +275,21 @@
             $this->db->insert('cip_uploads', $file_data);
         }
 
+        public function customer_upload_data($data,$req){
+            $this->load->database();
+
+            $file_data = array(
+                'filename' => $data['file_name'],
+                'filepath' => $data['file_path'],
+                'sr_request_number' => $req['sr_request_number'],
+                'fullpath' => $data['full_path'],
+                'type' => $data['type'],
+                'user_id' => $req['user_id']
+            );
+
+            $this->db->insert('cip_customer_uploads', $file_data);
+        }
+
         public function update_upload_data($data,$id){
             $this->load->database();
 
@@ -287,12 +305,40 @@
 
         }
 
+        public function customer_update_upload_data($data,$req){
+            $this->load->database();
+
+            $file_data = array(
+                'filename' => $data['file_name'],
+                'filepath' => $data['file_path'],
+                'fullpath' => $data['full_path'],
+                );
+
+            $array = array('sr_request_number' => $req['sr_request_number'], 'type' => $data['type'], 'user_id' => $req['user_id']);
+            $this->db->where($array);
+            $this->db->update('cip_customer_uploads',$file_data);
+
+        }
+
         public function retrieve_upload_data($req_num){
             $this->load->database();
 
             $this->db->select('*');
             $this->db->where('sr_request_number', $req_num);
             $this->db->from('cip_uploads');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+        }
+
+        public function retrieve_customer_upload_data($user_id,$req_num){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $req_num);
+            $this->db->where('user_id', $user_id);
+            $this->db->from('cip_customer_uploads');
             $query = $this->db->get();
             $result = $query->result();
 
@@ -308,6 +354,26 @@
             $this->db->from('cip_uploads');
             $query = $this->db->get();
             $result = $query->result();
+            $count = count($result);
+            if($count == 2){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+
+        public function check_customer_uploads($data){
+
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $data['sr_request_number']);
+            $this->db->where('user_id', $data['user_id']);
+            $this->db->from('cip_customer_uploads');
+            $query = $this->db->get();
+            $result = $query->result();
+
             $count = count($result);
             if($count == 2){
                 return true;
