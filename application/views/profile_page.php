@@ -1,5 +1,7 @@
     <?php $this->load->view('template/header'); ?>
     <link rel="stylesheet" type="text/css" href="<? echo base_url();?>/css/tab.css">
+    <script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>/js/profile_page.js"></script>
 
     <style>
     .billing input {
@@ -17,31 +19,7 @@
     }
 
     </style>
-    <script>
-        $(document).ready(function(){
-            var name = $('#comp_name option:selected').text();
-            $('#comp_text').html(name);
-            $( "#comp_name" ).change(function() {
-                var name = $('#comp_name option:selected').text();
-                $('#comp_text').html(name);
-            });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function(){
-            $('.select_action').change(function(){
-
-                var status = $(this).val();
-                var id = $(this).attr("data-id");
-                if(status == 'Proposal Accepted'){
-                    $('.file_upload'+id).show();
-                }else{
-                    $('.file_upload'+id).hide();
-                }
-            });
-        });
-    </script>
 
     <?php $this->load->view('template/nav'); ?>
     <?php $six_digit_random_number = mt_rand(000000, 999999);
@@ -72,8 +50,9 @@
                                     <div class="tab-pane fade in active" id="tab1primary">
 
                                         <div class="row">
+                                                <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Download</button>
                                                 <div class="table table-responsive">
-                                                    <table class="table table-bordered">
+                                                    <table class="table table-bordered customer_table">
                                                         <thead>
                                                           <tr>
                                                             <th>No</th>
@@ -294,7 +273,7 @@
                                 <div class="tab-pane fade" id="tab3primary">
                                     <div class="row">
                                             <div class="table">
-                                                <table class="table table-bordered">
+                                                <table class="table table-bordered table-responsive">
                                                     <thead>
                                                       <tr>
                                                         <th>No</th>

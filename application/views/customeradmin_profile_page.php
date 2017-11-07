@@ -1,6 +1,7 @@
     <?php $this->load->view('template/header'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/css/tab.css">
     <script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>/js/customeradmin_page.js"></script>
 
     <style>
     .table {
@@ -10,11 +11,6 @@
     }
     </style>
     <script>
-        $(document).ready(function(){
-            $("#print").on("click", function(){
-                $('#customeradmintable').tableToCSV();
-            });
-        });
 
     </script>
 
@@ -38,9 +34,9 @@
                                     <div class="tab-pane fade in active" id="tab1primary">
 
                                         <div class="row">
-                                                <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Print</button>
+                                                <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Download</button>
                                                 <div class="table">
-                                                    <table class="table table-bordered" id="customeradmintable">
+                                                    <table class="table table-bordered table-responsive" id="customeradmintable">
                                                         <thead>
                                                           <tr>
                                                             <th>No</th>

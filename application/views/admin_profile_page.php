@@ -1,5 +1,7 @@
 <?php $this->load->view('template/header'); ?>
 <link rel="stylesheet" type="text/css" href="<? echo base_url();?>/css/tab.css">
+<script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>/js/admin_profile_page.js"></script>
 
 <style>
 .billing input {
@@ -17,20 +19,6 @@ hr {
 }
 
 </style>
-<script>
-    $(document).ready(function(){
-        $('.status_select').change(function(){
-
-            var status = $(this).val();
-            var id = $(this).attr("data-id");
-            if(status == 'feasible'){
-                $('.file_upload'+id).show();
-            }else{
-                $('.file_upload'+id).hide();
-            }
-        });
-    });
-</script>
 
 <?php $this->load->view('template/nav'); ?>
 <?php
@@ -61,8 +49,9 @@ hr {
                                 <div class="tab-pane fade in active" id="tab1primary">
 
                                     <div class="row">
+                                        <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Download</button>
                                             <div class="table">
-                                                <table class="table table-bordered">
+                                                <table class="table table-responsive table-bordered admin_table ">
                                                     <thead>
                                                       <tr>
                                                         <th>No</th>
@@ -146,7 +135,7 @@ hr {
                                 <div class="tab-pane fade" id="tab3primary">
                                     <div class="row">
                                             <div class="table">
-                                                <table class="table table-bordered">
+                                                <table class="table table-bordered table-responsive">
                                                     <thead>
                                                       <tr>
                                                         <th>No</th>
@@ -195,7 +184,7 @@ hr {
                                     <?php if(!empty($companies)) { ?>
                                     <div class="row">
                                             <div class="table">
-                                                <table class="table table-bordered">
+                                                <table class="table table-bordered table-responsive">
                                                     <thead>
                                                       <tr>
                                                         <th>No</th>

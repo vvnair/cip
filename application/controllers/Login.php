@@ -73,25 +73,36 @@ class Login extends CI_Controller {
         $result = $this->email->send();
     }
     public function do_login()
-    {
-        $login_data = $this->input->post();
-        $this->load->model('register');
+    {  
+        if($this->session->userdata('sessionid')){
+            $sess_data = $this->session->userdata();//echo "<pre>";print_r($sess_data);
+            $istrue['status'] =200;
 
-        $session_data =$this->session->userdata();
-        // if($session_data['session_data']){
-        //         echo "yes";exit;
-        // }
-        //echo "<pre>";print_r($session_data);exit;
-        $istrue = $this->register->usercheck($login_data);
-        if($istrue['status'] == 200 && $istrue['admin'] == '0' && $istrue['role'] == 'customer'){
-            $this->profile($istrue['result']);
-        }elseif($istrue['status'] == 200 && $istrue['admin'] == '1' && $istrue['role'] == 'vendoradmin'){
-            $this->admin_profile($istrue['result']);
-        }elseif($istrue['status'] == 200 && $istrue['role'] == 'customeradmin'){
-            $this->customer_admin_profile($istrue['result']);
+            if($istrue['status'] == 200 && $sess_data['role'] == 'customer'){
+                $this->profile($sess_data);
+            }elseif ($istrue['status'] == 200 && $sess_data['role'] == 'vendoradmin') {
+                $this->admin_profile($sess_data);
+            }elseif($istrue['status'] == 200 && $sess_data['role'] == 'customeradmin'){
+                $this->customer_admin_profile($sess_data);
+            }
+
         }else{
-            redirect('','refresh');
+            $login_data = $this->input->post();
+            $this->load->model('register');
+            $istrue = $this->register->usercheck($login_data);
+
+            if($istrue['status'] == 200 && $istrue['admin'] == '0' && $istrue['role'] == 'customer'){
+                $this->profile($istrue['result']);
+            }elseif($istrue['status'] == 200 && $istrue['admin'] == '1' && $istrue['role'] == 'vendoradmin'){
+                $this->admin_profile($istrue['result']);
+            }elseif($istrue['status'] == 200 && $istrue['role'] == 'customeradmin'){
+                $this->customer_admin_profile($istrue['result']);
+            }
+            // else{
+            //     redirect('','refresh');
+            // }
         }
+
     }
 
     public function profile($data){
@@ -101,7 +112,8 @@ class Login extends CI_Controller {
                     'useremail'  => $data->email,
                     'username' => $data->name,
                     'loggedin' => 1,
-                    'companyname' => $data->company_name
+                    'companyname' => $data->company_name,
+                    'role' => $data->role
             );
             $this->session->set_userdata($arraydata);
         }
@@ -121,14 +133,15 @@ class Login extends CI_Controller {
                     'username' => $data->name,
                     'loggedin' => 1,
                     'isadmin' => 1,
-                    'companyname' => $data->company_name
+                    'companyname' => $data->company_name,
+                    'role' => $data->role
             );
 
             $this->session->set_userdata($arraydata);
         }
         $session_data = $this->session->userdata();
         $admin_page_data = $this->admin_page_data();
-
+        //echo "<pre>";print_r($_SESSION);exit;
         $this->load->view('admin_profile_page',$admin_page_data);
     }
 
@@ -140,7 +153,8 @@ class Login extends CI_Controller {
                     'username' => $data->name,
                     'loggedin' => 1,
                     'isadmin' => 1,
-                    'companyname' => $data->company_name
+                    'companyname' => $data->company_name,
+                    'role' => $data->role
             );
 
             $this->session->set_userdata($arraydata);
