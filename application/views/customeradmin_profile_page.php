@@ -3,23 +3,6 @@
     <script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>/js/customeradmin_page.js"></script>
 
-    <style>
-    .table {
-        margin-left: 10px;
-        margin-right: 10px;
-        width: 98%;
-    }
-
-    .table td  {
-       text-align: center;
-    }
-    .table th  {
-       text-align: center;
-    }
-    </style>
-    <script>
-
-    </script>
 
     <?php $this->load->view('template/nav'); ?>
 
@@ -42,7 +25,7 @@
 
                                         <div class="row">
                                                 <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Download</button>
-                                                <div class="table">
+                                                <div class="table table-responsive">
                                                     <table class="table table-bordered table-responsive" id="customeradmintable">
                                                         <thead>
                                                           <tr>
@@ -76,7 +59,6 @@
                                                                     </td>
                                                                     <td><?php echo $v->email;?></td>
                                                                     <td><a href="#" data-toggle="tooltip" title="<?php echo $v->company."\n".$v->baddress1 . "\n ". $v->baddress2 . "\n " . $v->baddress3 . "\n" . $v->bcity . "\n " . $v->bstate . "\n " . $v->bcountry . "\n " . $v->bzipcode . " \n GSTIN No: " . $v->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                                                    <!-- <td><?php //echo $v->company ."<br />".$v->baddress1 . "<br /> ". $v->baddress2 . " <br/>" . $v->baddress3 . "<br /> " . $v->bcity . "<br /> " . $v->bstate . "<br /> " . $v->bcountry . "<br /> " . $v->bzipcode . " <br /> GSTIN No: " . $v->bgst ; ?></td> -->
                                                                     <td><?php echo $v->company ."<br />". $v->iaddress1 . "<br /> ". $v->iaddress2 . " <br/>" . $v->iaddress3 . "<br /> " . $v->icity . "<br /> " . $v->istate . "<br /> " . $v->icountry . "<br /> " . $v->izipcode . " <br /> GSTIN No: " . $v->igst ; ; ?></td>
                                                                     <td><?php echo $v->bandwidth; ?></td>
                                                                     <td><?php echo $v->status; ?></td>
@@ -85,7 +67,7 @@
                                                                             foreach ($files as $k => $vu) { ?>
                                                                                 <?php foreach($vu as $y => $z) { ?>
                                                                                     <?php if($z->sr_request_number == $v->request_number) {  ?>
-                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div><br/>
+                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div><br/>
                                                                                     <?php } ?>
                                                                                 <?php } ?>
                                                                         <?php    } ?>
@@ -93,7 +75,7 @@
                                                                         <?php foreach($self_files as $l => $e ){
                                                                                 foreach($e as $a => $b){ ?>
                                                                                     <?php if($b->sr_request_number == $v->request_number) {?>
-                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo ucfirst($b->filename); ?>  </a> </div><br/>
+                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo ucfirst($b->filename); ?>  </a> </div><br/>
                                                                                     <?php } ?>
                                                                             <? }
                                                                         } ?>
@@ -107,7 +89,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -252,3 +252,24 @@
     color: #fff; /* active text color */
     background-color: #a94442; /* active bg color */
 }
+
+.billing input {
+    width: 85%;
+}
+
+.table {
+    margin-left: 10px;
+    margin-right: 15%;
+    width: 98%;
+}
+
+hr {
+        border-top: 1px solid #8c8b8b;
+}
+.table td {
+   text-align: center;
+}
+
+.table th  {
+   text-align: center;
+}

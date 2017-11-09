@@ -3,29 +3,6 @@
     <script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>/js/profile_page.js"></script>
 
-    <style>
-    .billing input {
-        width: 85%;
-    }
-
-    .table {
-        margin-left: 10px;
-        margin-right: 20%;
-        width: 98%;
-    }
-
-    hr {
-        	border-top: 1px solid #8c8b8b;
-    }
-
-    .table td  {
-       text-align: center;
-    }
-    .table th  {
-       text-align: center;
-    }
-    </style>
-
 
     <?php $this->load->view('template/nav'); ?>
     <?php $six_digit_random_number = mt_rand(000000, 999999);
@@ -97,7 +74,7 @@
                                                                 <?php if($value->status == 'feasible'){ ?>
 
                                                                     <div>
-                                                                        <form action="http://localhost/cip/index.php/Login/change_proposal_status" method="post" enctype="multipart/form-data"><?    //   echo "<pre>";print_r($proposal_statuses ); ?>
+                                                                        <form action="<?php echo base_url(); ?>index.php/Login/change_proposal_status" method="post" enctype="multipart/form-data"><?    //   echo "<pre>";print_r($proposal_statuses ); ?>
                                                                             <select name="proposal_status" class="form-control select_action" data-id="<?php echo $value->request_number; ?>">
                                                                                 <?php //foreach($customer_proposal_status as $p => $m) { ?>
                                                                                     <?php foreach ($proposal_statuses as $val) { ?>
@@ -138,7 +115,7 @@
                                                                     foreach ($files as $k => $v) { ?>
                                                                         <?php foreach($v as $y => $z) {?>
                                                                             <?php if($z->sr_request_number == $value->request_number) { ?>
-                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div><br/>
+                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div><br/>
                                                                             <?php } ?>
                                                                         <?php } ?>
                                                                 <?php    } ?>
@@ -146,7 +123,7 @@
                                                                 <?php foreach($self_files as $l => $e ){
                                                                         foreach($e as $a => $b){ ?>
                                                                             <?php if($b->sr_request_number == $value->request_number) {?>
-                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo ucfirst($b->filename); ?>  </a> </div><br/>
+                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo ucfirst($b->filename); ?>  </a> </div><br/>
                                                                             <?php } ?>
                                                                     <? }
                                                                 } ?>
@@ -163,7 +140,7 @@
                                     <!-- New Request tab starts here -->
                                     <div class="tab-pane fade" id="tab2primary">
 
-                                    <form method="post" action="http://localhost/cip/index.php/Login/new_request">
+                                    <form method="post" action="<?php echo base_url(); ?>index.php/Login/new_request">
                                         <div class="row">
                                             <div class="col-sm-6 billing" >
                                                 <div class="form-group">
@@ -303,7 +280,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="tab3primary">
                                     <div class="row">
-                                            <div class="table">
+                                            <div class="table table-responsive">
                                                 <table class="table table-bordered table-responsive">
                                                     <thead>
                                                       <tr>

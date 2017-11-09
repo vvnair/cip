@@ -3,29 +3,6 @@
 <script type="text/javascript" src="<?php echo base_url();?>/js/jquery.tabletoCSV.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>/js/admin_profile_page.js"></script>
 
-<style>
-.billing input {
-    width: 85%;
-}
-
-.table {
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 98%;
-}
-
-hr {
-        border-top: 1px solid #8c8b8b;
-}
-.table td {
-   text-align: center;
-}
-
-.table th  {
-   text-align: center;
-}
-</style>
-
 <?php $this->load->view('template/nav'); ?>
 <?php
 
@@ -56,8 +33,8 @@ hr {
 
                                     <div class="row">
                                         <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Download</button>
-                                            <div class="table">
-                                                <table class="table table-responsive table-bordered admin_table ">
+                                            <div class="table table-responsive" >
+                                                <table class="table table-bordered admin_table ">
                                                     <thead>
                                                       <tr>
                                                         <th>No</th>
@@ -87,7 +64,7 @@ hr {
                                                                             echo "<br /><br /> Last updated on : ". $e->update_date . "( ". $e->updated_by ." )";
                                                                         }
                                                                     }
-                                                                } 
+                                                                }
                                                             ?>
                                                         </strong>
                                                     </td>
@@ -99,7 +76,7 @@ hr {
 
                                                     <td><?php echo $value->company."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
                                                     <td><?php echo $value->bandwidth; ?></td>
-                                                    <form method="post" action="http://localhost/cip/index.php/Login/update_status" enctype="multipart/form-data">
+                                                    <form method="post" action="<?php echo base_url(); ?>index.php/Login/update_status" enctype="multipart/form-data">
                                                     <td><select name="status" class="form-control status_select" data-id="<?php echo $value->request_number; ?>" >
                                                             <?php foreach ($statuses as $k => $v) { ?>
                                                                 <option value="<?php echo $v; ?>" <?php if($v === $value->status){?> selected<?php } ?>><?php echo ucwords($v); ?></option>
@@ -141,7 +118,7 @@ hr {
                                                             foreach($self_files as $ke => $fi){
                                                                 foreach($fi as $p => $m) { ?>
                                                                     <?php if($m->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo ucfirst($m->filename); ?></a></div><br/>
+                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo ucfirst($m->filename); ?></a></div><br/>
                                                                     <?php } ?>
                                                         <?php    }
                                                             }
@@ -151,7 +128,7 @@ hr {
                                                             foreach($files as $k => $file){
                                                                 foreach($file as $y => $z) {?>
                                                                     <?php if($z->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div><br/>
+                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div><br/>
                                                                     <?php } ?>
                                                         <?php }}} ?>
                                                     </td>
@@ -168,7 +145,7 @@ hr {
                                 <!-- New Request tab starts here -->
                                 <div class="tab-pane fade" id="tab3primary">
                                     <div class="row">
-                                            <div class="table">
+                                            <div class="table table-responsive">
                                                 <table class="table table-bordered table-responsive">
                                                     <thead>
                                                       <tr>
@@ -182,7 +159,7 @@ hr {
                                                     </thead>
                                                     <tbody>
                                                         <?php foreach($user_roles as $k => $v){ ?>
-                                                        <form action ="http://localhost/cip/index.php/Login/update_user_role" method="post">
+                                                        <form action ="<?php echo base_url(); ?>index.php/Login/update_user_role" method="post">
                                                             <tr>
                                                                 <td><?php echo $k+1; ?></td>
                                                                 <td><?php echo $v->id; ?></td>
@@ -217,7 +194,7 @@ hr {
                                 <div class="tab-pane fade" id="tab2primary">
                                     <?php if(!empty($companies)) { ?>
                                     <div class="row">
-                                            <div class="table">
+                                            <div class="table table-responsive">
                                                 <table class="table table-bordered table-responsive">
                                                     <thead>
                                                       <tr>
@@ -240,7 +217,7 @@ hr {
                                     <?php } ?>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <form action="http://localhost/cip/index.php/Login/add_company" method="post">
+                                            <form action="<?php echo base_url(); ?>index.php/Login/add_company" method="post">
                                               <div class="form-group">
                                                 <label for="company">Company Name</label>
                                                 <input type="text" class="form-control" name="company" style="width: 40%;">
@@ -261,9 +238,7 @@ hr {
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 
 <?php $this->load->view('template/footer'); ?>
