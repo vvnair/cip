@@ -60,14 +60,27 @@
                                                             <?php foreach($data as $k => $v){ ?>
                                                                 <tr>
                                                                     <td><?php echo $k+1; ?></td>
-                                                                    <td><strong><?php echo $v->request_number . "<br /> <br /> Requested on : ". $v->request_date;?></strong></td>
+                                                                    <td>
+                                                                        <strong>
+                                                                            <?php echo $v->request_number . "<br /> <br /> Requested on : ". $v->request_date;?>
+                                                                            <?php
+                                                                                foreach($last_update as $r => $o){
+                                                                                    foreach($o as $l =>$e){
+                                                                                        if($e->sr_request_number == $v->request_number){
+                                                                                            echo "<br /><br /> Last updated on : ". $e->update_date . "( ". $e->updated_by ." )";
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ?>
+                                                                        </strong>
+                                                                    </td>
                                                                     <td><?php echo $v->email;?></td>
                                                                     <td><a href="#" data-toggle="tooltip" title="<?php echo $v->company."\n".$v->baddress1 . "\n ". $v->baddress2 . "\n " . $v->baddress3 . "\n" . $v->bcity . "\n " . $v->bstate . "\n " . $v->bcountry . "\n " . $v->bzipcode . " \n GSTIN No: " . $v->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
                                                                     <!-- <td><?php //echo $v->company ."<br />".$v->baddress1 . "<br /> ". $v->baddress2 . " <br/>" . $v->baddress3 . "<br /> " . $v->bcity . "<br /> " . $v->bstate . "<br /> " . $v->bcountry . "<br /> " . $v->bzipcode . " <br /> GSTIN No: " . $v->bgst ; ?></td> -->
                                                                     <td><?php echo $v->company ."<br />". $v->iaddress1 . "<br /> ". $v->iaddress2 . " <br/>" . $v->iaddress3 . "<br /> " . $v->icity . "<br /> " . $v->istate . "<br /> " . $v->icountry . "<br /> " . $v->izipcode . " <br /> GSTIN No: " . $v->igst ; ; ?></td>
                                                                     <td><?php echo $v->bandwidth; ?></td>
                                                                     <td><?php echo $v->status; ?></td>
-                                                                    <td> 
+                                                                    <td>
                                                                         <?php if($v->status == 'feasible') {
                                                                             foreach ($files as $k => $vu) { ?>
                                                                                 <?php foreach($vu as $y => $z) { ?>

@@ -313,7 +313,7 @@
                                                       </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php foreach ($data as $key => $value) { print_r($value);?>
+                                                        <?php foreach ($data as $key => $value) { ?>
                                                             <tr>
                                                                 <td><?php echo $key+1; ?></td>
                                                                 <td><?php echo $value->request_number; ?></td>

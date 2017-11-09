@@ -77,7 +77,20 @@ hr {
 
                                                  <tr>
                                                     <td><?php echo $key+1 ; ?></td>
-                                                    <td><strong><?php echo $value->request_number . "<br /><br /> Requested on : ". $value->request_date; ?></strong></td>
+                                                    <td>
+                                                        <strong>
+                                                            <?php echo $value->request_number . "<br /><br /> Requested on : ". $value->request_date; ?>
+                                                            <?php
+                                                                foreach($last_update as $r => $o){
+                                                                    foreach($o as $l =>$e){
+                                                                        if($e->sr_request_number == $value->request_number){
+                                                                            echo "<br /><br /> Last updated on : ". $e->update_date . "( ". $e->updated_by ." )";
+                                                                        }
+                                                                    }
+                                                                } 
+                                                            ?>
+                                                        </strong>
+                                                    </td>
                                                     <td><?php echo $value->email; ?></td>
                                                     <td>
                                                         <a href="#" data-toggle="tooltip" title="<?php echo $value->company."\n".$value->baddress1 . "\n ". $value->baddress2 . "\n " . $value->baddress3 . "\n" . $value->bcity . "\n " . $value->bstate . "\n " . $value->bcountry . "\n " . $value->bzipcode . " \n GSTIN No: " . $value->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -128,7 +141,7 @@ hr {
                                                             foreach($self_files as $ke => $fi){
                                                                 foreach($fi as $p => $m) { ?>
                                                                     <?php if($m->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo ucfirst($m->filename); ?></a></div>
+                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo ucfirst($m->filename); ?></a></div><br/>
                                                                     <?php } ?>
                                                         <?php    }
                                                             }
@@ -137,7 +150,9 @@ hr {
 
                                                             foreach($files as $k => $file){
                                                                 foreach($file as $y => $z) {?>
-                                                                    <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div>
+                                                                    <?php if($z->sr_request_number == $value->request_number){ ?>
+                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div><br/>
+                                                                    <?php } ?>
                                                         <?php }}} ?>
                                                     </td>
                                                     </form>

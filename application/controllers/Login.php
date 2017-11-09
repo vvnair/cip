@@ -337,9 +337,13 @@ class Login extends CI_Controller {
         foreach ($users_data as $key => $value) {
             $upload_data[] = $this->register->retrieve_customer_upload_data($value->user_id,$value->sr_request_number);
             $self_upload_data[] = $this->register->retrieve_upload_data($value->sr_request_number);
+            $last_update[] = $this->register->last_update($value->sr_request_number);
         }
         if($upload_data){
             $view_data['files'] = $upload_data;
+        }
+        if($last_update){
+            $view_data['last_update'] = $last_update;
         }
         if($self_upload_data){
             $view_data['self_files'] = $self_upload_data;
@@ -378,6 +382,7 @@ class Login extends CI_Controller {
             $upload_data[] = $this->register->retrieve_upload_data($sr_number);
             $self_upload_data[] = $this->register->retrieve_customer_upload_data($value->user_id,$sr_number);
             $get_user_companies[] = $this->register->get_company_user($value->user_id);
+            $last_update[] = $this->register->last_update($sr_number);
         }
         //echo "<pre>";print_r($users_data);exit;
         if($upload_data){
@@ -385,6 +390,9 @@ class Login extends CI_Controller {
         }
         if($self_upload_data){
             $view_data['self_files'] = $self_upload_data;
+        }
+        if($last_update){
+            $view_data['last_update'] = $last_update;
         }
         //echo "<pre>";print_r($upload_data);exit;
         $view_data['data'] = $users_data;
