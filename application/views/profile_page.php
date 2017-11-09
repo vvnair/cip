@@ -18,6 +18,12 @@
         	border-top: 1px solid #8c8b8b;
     }
 
+    .table td  {
+       text-align: center;
+    }
+    .table th  {
+       text-align: center;
+    }
     </style>
 
 
@@ -61,6 +67,7 @@
                                                             <th>Implementation Address</th>
                                                             <th>Status</th>
                                                             <th>Action</th>
+                                                            <th>Documents Uploaded till now </th>
                                                           </tr>
                                                         </thead>
                                                         <tbody>
@@ -68,20 +75,23 @@
 
                                                           <tr>
                                                             <td><?php echo $key+1 ; ?></td>
-                                                            <td><strong><?php echo $value->request_number; ?></strong></td>
-                                                            <td><?php echo $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode; ?></td>
-                                                            <td><?php echo $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
+                                                            <td>
+                                                                <strong>
+                                                                    <?php echo $value->request_number . "<br /><br /> Requested on : ". $value->request_date ;
+                                                                    foreach($last_update as $r => $o){
+                                                                        foreach($o as $l =>$e){
+                                                                            if($e->sr_request_number == $value->request_number){
+                                                                                echo "<br /><br /> Last updated on : ". $e->update_date . "( ". $e->updated_by ." )";
+                                                                            }
+                                                                        }
+                                                                    } ?>
+                                                                </strong>
+                                                            </td>
+                                                            <!-- <td><?php //echo $value->company ."<br />". $value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode; ?></td> -->
+                                                            <td><a href="#" data-toggle="tooltip" title="<?php echo $value->company."\n".$value->baddress1 . "\n ". $value->baddress2 . "\n " . $value->baddress3 . "\n" . $value->bcity . "\n " . $value->bstate . "\n " . $value->bcountry . "\n " . $value->bzipcode . " \n GSTIN No: " . $value->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                                                            <td><?php echo $value->company ."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
                                                             <td><strong><?php echo ucfirst($value->status);?></strong>
-                                                                <?php if($value->status == 'feasible') {
-                                                                    foreach ($files as $k => $v) { ?>
-                                                                        <?php foreach($v as $y => $z) {?>
-                                                                            <?php if($z->sr_request_number == $value->request_number) { ?>
-                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div>
-                                                                            <?php } ?>
-                                                                        <?php } ?>
-                                                                <?php    } ?>
 
-                                                                <?php } ?>
                                                             </td>
                                                             <td>
                                                                 <?php if($value->status == 'feasible'){ ?>
@@ -98,10 +108,13 @@
                                                                             </select>
 
                                                                             <input type="hidden" name="sr_request_number" value="<?php echo $value->request_number; ?>"  />
+                                                                            <input type="hidden" name="req_num" value="<?php echo $value->request_number; ?>"  />
                                                                             <input type="hidden" name="user_id" value="<?php echo $user_id; ?>"/>
+                                                                            <input type="hidden" name="last_update_date" value="<?php echo $date;?>" />
+                                                                            <input type="hidden" name="user_name" value="<?php echo $session_data['username']; ?>" />
                                                                             <div class="file_upload<?php echo $value->request_number;?>" " hidden >
                                                                                 <div>
-                                                                                <label for="signedproposal">Proposal : </label>
+                                                                                <label for="signedproposal">Purchase Order : </label>
                                                                                 <input type="file" name="signedproposal" size="20" class="btn btn-primary" id="signedproposal"/>
                                                                                 </div>
                                                                                 <div>
@@ -119,7 +132,25 @@
                                                                     </div>
 
                                                             <?php } ?>
-                                                            </td?
+                                                            </td>
+                                                            <td>
+                                                                <?php if($value->status == 'feasible') {
+                                                                    foreach ($files as $k => $v) { ?>
+                                                                        <?php foreach($v as $y => $z) {?>
+                                                                            <?php if($z->sr_request_number == $value->request_number) { ?>
+                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div><br/>
+                                                                            <?php } ?>
+                                                                        <?php } ?>
+                                                                <?php    } ?>
+                                                                <?php } ?>
+                                                                <?php foreach($self_files as $l => $e ){
+                                                                        foreach($e as $a => $b){ ?>
+                                                                            <?php if($b->sr_request_number == $value->request_number) {?>
+                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="http://localhost/cip/index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo ucfirst($b->filename); ?>  </a> </div><br/>
+                                                                            <?php } ?>
+                                                                    <? }
+                                                                } ?>
+                                                            </td>
                                                           </tr>
 
                                                         <?php } ?>

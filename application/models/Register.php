@@ -242,6 +242,7 @@
             $this->db->from('cip_address');
             $this->db->join('cip_sr_status', 'cip_sr_status.sr_request_id = cip_address.id');
             $this->db->join('cip_users', 'cip_users.company_name = cip_sr_status.company_name');
+            $this->db->join('cip_companies','cip_companies.id = cip_address.company');
             $array = array('cip_sr_status.company_name' => $company, 'cip_users.role' => 'customer');
             $this->db->where($array);
             $query = $this->db->get();
@@ -259,6 +260,46 @@
 
             $this->db->where('sr_request_number', $data['req_num']);
             $this->db->update('cip_sr_status', $update_data);
+        }
+
+        public function sr_date_update($data){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $data['req_num']);
+            $this->db->from('cip_sr_date');
+            $query = $this->db->get();
+
+            if ( $query->num_rows() > 0 ) {
+                $update_data = array(
+                    'update_date' => $data['last_update_date'],
+                    'updated_by' => $data['user_name']
+                );
+
+                  $this->db->where('sr_request_number',$data['req_num']);
+                  $this->db->update('cip_sr_date',$update_data);
+            } else {
+                $insert_data = array(
+                    'sr_request_number' => $data['req_num'],
+                    'update_date' => $data['last_update_date'],
+                    'updated_by' => $data['user_name']
+                );
+                $this->db->insert('cip_sr_date',$insert_data);
+            }
+
+        }
+
+        public function last_update($sr_number){
+            $this->load->database();
+
+            $this->db->select('*');
+            $this->db->where('sr_request_number', $sr_number);
+            $this->db->from('cip_sr_date');
+            $query = $this->db->get();
+            $result = $query->result();
+
+            return $result;
+
         }
 
         public function upload_data($data,$id){

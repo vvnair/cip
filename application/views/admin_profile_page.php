@@ -17,7 +17,13 @@
 hr {
         border-top: 1px solid #8c8b8b;
 }
+.table td {
+   text-align: center;
+}
 
+.table th  {
+   text-align: center;
+}
 </style>
 
 <?php $this->load->view('template/nav'); ?>
@@ -59,7 +65,7 @@ hr {
                                                         <th>User ID</th>
                                                         <th>Billing Address</th>
                                                         <th>Implementation Address</th>
-                                                        <th>Bandwidth</th>
+                                                        <th>B/w</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                         <th>Documents Uploaded till Date </th>
@@ -68,61 +74,74 @@ hr {
                                                     <tbody>
                                                     <?php foreach ($data as $key => $value) { ?>
 
+
+                                                 <tr>
+                                                    <td><?php echo $key+1 ; ?></td>
+                                                    <td><strong><?php echo $value->request_number . "<br /><br /> Requested on : ". $value->request_date; ?></strong></td>
+                                                    <td><?php echo $value->email; ?></td>
+                                                    <td>
+                                                        <a href="#" data-toggle="tooltip" title="<?php echo $value->company."\n".$value->baddress1 . "\n ". $value->baddress2 . "\n " . $value->baddress3 . "\n" . $value->bcity . "\n " . $value->bstate . "\n " . $value->bcountry . "\n " . $value->bzipcode . " \n GSTIN No: " . $value->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a>
+
+                                                    </td>
+
+                                                    <td><?php echo $value->company."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
+                                                    <td><?php echo $value->bandwidth; ?></td>
                                                     <form method="post" action="http://localhost/cip/index.php/Login/update_status" enctype="multipart/form-data">
-                                                     <tr>
-                                                        <td><?php echo $key+1 ; ?></td>
-                                                        <td><?php echo $value->request_number; ?></td>
-                                                        <td><?php echo $value->email; ?></td>
-                                                        <td><?php echo  $value->company."<br />".$value->baddress1 . "<br /> ". $value->baddress2 . " <br/>" . $value->baddress3 . "<br /> " . $value->bcity . "<br /> " . $value->bstate . "<br /> " . $value->bcountry . "<br /> " . $value->bzipcode . " <br /> GSTIN No: " . $value->bgst ; ?></td>
-                                                        <td><?php echo $value->company."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
-                                                        <td><?php echo $value->bandwidth; ?></td>
-
-                                                        <td><select name="status" class="form-control status_select" data-id="<?php echo $value->request_number; ?>" >
-                                                                <?php foreach ($statuses as $k => $v) { ?>
-                                                                    <option value="<?php echo $v; ?>" <?php if($v === $value->status){?> selected<?php } ?>><?php echo $v; ?></option>
-                                                                <?php } ?>
-                                                            </select>
-                                                            <?php $stats = "";
-                                                                if($customer_proposal_data) { ?>
-                                                                <div style = "margin-top : 10px;">
-                                                                    Customer Response on Proposal : <?php foreach ($customer_proposal_data as $key => $val) { ?>
-                                                                        <?php if($val->sr_request_number == $value->request_number){ ?>
-                                                                            <strong><?php echo $val->proposal_status;
-                                                                                    $stats = $val->proposal_status;
-                                                                                     ?>
-                                                                            </strong>
-                                                                        <?php } ?>
-                                                                    <?php } ?>
-                                                                </div>
+                                                    <td><select name="status" class="form-control status_select" data-id="<?php echo $value->request_number; ?>" >
+                                                            <?php foreach ($statuses as $k => $v) { ?>
+                                                                <option value="<?php echo $v; ?>" <?php if($v === $value->status){?> selected<?php } ?>><?php echo ucwords($v); ?></option>
                                                             <?php } ?>
-                                                            <div class="file_upload<?php echo $value->request_number;?>" " hidden >
-                                                                <div>
-                                                                <label for="proposal">Proposal : </label>
-                                                                <input type="file" name="proposal" size="20" class="btn btn-primary" id="proposal"/>
-                                                                </div>
-                                                                <div>
-                                                                <label for="proposal">CAF : </label>
-                                                                <input type="file" name="caf" size="20" class="btn btn-primary" id="caf"/>
-                                                                </div>
+                                                        </select>
+                                                        <?php $stats = "";
+                                                            if($customer_proposal_data) { ?>
+                                                            <div style = "margin-top : 10px;">
+                                                                Customer Response on Proposal : <?php foreach ($customer_proposal_data as $key => $val) { ?>
+                                                                    <?php if($val->sr_request_number == $value->request_number){ ?>
+                                                                        <strong><?php echo $val->proposal_status;
+                                                                                $stats = $val->proposal_status;
+                                                                                 ?>
+                                                                        </strong>
+                                                                    <?php } ?>
+                                                                <?php } ?>
                                                             </div>
-                                                        </td>
-                                                        <td><input type="hidden" name="req_num" value="<?php echo $value->request_number; ?>"/>
-                                                            <input type="hidden" name="req_id" value="<?php echo $value->id; ?>"/>
-                                                            <button type="submit" class="btn btn-success">Update</button>
+                                                        <?php } ?>
+                                                        <div class="file_upload<?php echo $value->request_number;?>" " hidden >
+                                                            <div>
+                                                            <label for="proposal">Proposal : </label>
+                                                            <input type="file" name="proposal" size="20" class="btn btn-primary" id="proposal"/>
+                                                            </div>
+                                                            <div>
+                                                            <label for="proposal">CAF : </label>
+                                                            <input type="file" name="caf" size="20" class="btn btn-primary" id="caf"/>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td><input type="hidden" name="req_num" value="<?php echo $value->request_number; ?>"/>
+                                                        <input type="hidden" name="req_id" value="<?php echo $value->id; ?>"/>
+                                                        <input type="hidden" name="last_update_date" value="<?php echo $date;?>" />
+                                                        <input type="hidden" name="user_name" value="<?php echo $session_data['username']; ?>" />
+                                                        <button type="submit" class="btn btn-success">Update</button>
 
-                                                        </td>
-                                                        <td>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                            foreach($self_files as $ke => $fi){
+                                                                foreach($fi as $p => $m) { ?>
+                                                                    <?php if($m->sr_request_number == $value->request_number){ ?>
+                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo ucfirst($m->filename); ?></a></div>
+                                                                    <?php } ?>
+                                                        <?php    }
+                                                            }
+                                                        ?>
+                                                        <?php if($stats == 'Proposal Accepted') {
 
-                                                            <?php if($stats == 'Proposal Accepted') {
-
-                                                                foreach($files as $k => $file){
-                                                                    foreach($file as $y => $z) {?>
-                                                                        <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div>
-                                                            <?php }}} ?>
-                                                        </td>
-                                                      </tr>
-
+                                                            foreach($files as $k => $file){
+                                                                foreach($file as $y => $z) {?>
+                                                                    <div><a href="http://localhost/cip/index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div>
+                                                        <?php }}} ?>
+                                                    </td>
                                                     </form>
+                                                  </tr>
 
                                                     <?php } ?>
 

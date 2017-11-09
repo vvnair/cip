@@ -73,20 +73,20 @@ class Login extends CI_Controller {
         $result = $this->email->send();
     }
     public function do_login()
-    {  
-        if($this->session->userdata('sessionid')){
-            $sess_data = $this->session->userdata();//echo "<pre>";print_r($sess_data);
-            $istrue['status'] =200;
-
-            if($istrue['status'] == 200 && $sess_data['role'] == 'customer'){
-                $this->profile($sess_data);
-            }elseif ($istrue['status'] == 200 && $sess_data['role'] == 'vendoradmin') {
-                $this->admin_profile($sess_data);
-            }elseif($istrue['status'] == 200 && $sess_data['role'] == 'customeradmin'){
-                $this->customer_admin_profile($sess_data);
-            }
-
-        }else{
+    {
+        // if($this->session->userdata('sessionid')){
+        //     $sess_data = $this->session->userdata();//echo "<pre>";print_r($sess_data);
+        //     $istrue['status'] =200;
+        //
+        //     if($istrue['status'] == 200 && $sess_data['role'] == 'customer'){
+        //         $this->profile($sess_data);
+        //     }elseif ($istrue['status'] == 200 && $sess_data['role'] == 'vendoradmin') {
+        //         $this->admin_profile($sess_data);
+        //     }elseif($istrue['status'] == 200 && $sess_data['role'] == 'customeradmin'){
+        //         $this->customer_admin_profile($sess_data);
+        //     }
+        //
+        // }else{
             $login_data = $this->input->post();
             $this->load->model('register');
             $istrue = $this->register->usercheck($login_data);
@@ -98,10 +98,10 @@ class Login extends CI_Controller {
             }elseif($istrue['status'] == 200 && $istrue['role'] == 'customeradmin'){
                 $this->customer_admin_profile($istrue['result']);
             }
-            // else{
-            //     redirect('','refresh');
-            // }
-        }
+            else{
+                redirect('','refresh');
+            }
+        //}
 
     }
 
@@ -220,6 +220,7 @@ class Login extends CI_Controller {
         }
 
         $update = $this->register->update_status($data);
+        $last_update_date = $this->register->sr_date_update($data);
 
         $session_data = $this->session->userdata();
         $admin_page_data = $this->admin_page_data();
@@ -242,12 +243,16 @@ class Login extends CI_Controller {
 
     public function change_proposal_status(){
         $data = $this->input->post();
-
         $check_files = $this->register->check_customer_uploads($data);
 
         foreach($_FILES as $k => $file){
             if(!$_FILES[$k]['name'] == ''){
-                $filename = $k."-".$data['sr_request_number'].".pdf";
+                if($k == 'signedproposal'){
+                    $filename = "PO-".$data['sr_request_number'].".pdf";
+                }else{
+                    $filename = $k."-".$data['sr_request_number'].".pdf";
+                }
+
                 $config['upload_path']          = './uploads/';
                 $config['allowed_types']        = '*';
                 $config['max_size']             = 10000;
@@ -273,6 +278,7 @@ class Login extends CI_Controller {
 
 
         $update_status = $this->register->update_proposal_status($data);
+        $last_update_date = $this->register->sr_date_update($data);
         $session_data = $this->session->userdata();
         $page_data = $this->user_page_data($session_data['sessionid']);
 
@@ -289,7 +295,9 @@ class Login extends CI_Controller {
         foreach ($user_data as $key => $value) {
             $sr_number = $value->request_number;
             $upload_data[] = $this->register->retrieve_upload_data($sr_number);
+            $self_upload_data[] = $this->register->retrieve_customer_upload_data($value->user_id,$sr_number);
             $proposal_data[] = $this->register->retrieve_proposal_data($sr_number);
+            $last_update[] = $this->register->last_update($sr_number);
         }
         if($get_user_companies){
             $view_data['user_companies'] = $get_user_companies;
@@ -302,7 +310,13 @@ class Login extends CI_Controller {
                                                     'Proposal Read',
                                                     'Proposal Accepted');
         }
-
+        if($self_upload_data){
+            $view_data['self_files'] = $self_upload_data;
+        }
+        if($last_update){
+            $view_data['last_update'] = $last_update;
+        }
+        //echo "<pre>";print_r($last_update);exit;
         if($proposal_data) {
             $view_data['customer_proposal_status'] = $proposal_data;
         }
@@ -322,9 +336,13 @@ class Login extends CI_Controller {
         $view_data['data'] = $users_data;
         foreach ($users_data as $key => $value) {
             $upload_data[] = $this->register->retrieve_customer_upload_data($value->user_id,$value->sr_request_number);
+            $self_upload_data[] = $this->register->retrieve_upload_data($value->sr_request_number);
         }
         if($upload_data){
             $view_data['files'] = $upload_data;
+        }
+        if($self_upload_data){
+            $view_data['self_files'] = $self_upload_data;
         }
         if($proposal_data){
             $view_data['customer_proposal_data'] = $proposal_data;
@@ -354,7 +372,23 @@ class Login extends CI_Controller {
     public function customeradmin_page_data($company){
 
         $users_data = $this->register->retrieve_companyusers_requests($company);
+
+        foreach ($users_data as $key => $value) {
+            $sr_number = $value->request_number;
+            $upload_data[] = $this->register->retrieve_upload_data($sr_number);
+            $self_upload_data[] = $this->register->retrieve_customer_upload_data($value->user_id,$sr_number);
+            $get_user_companies[] = $this->register->get_company_user($value->user_id);
+        }
+        //echo "<pre>";print_r($users_data);exit;
+        if($upload_data){
+            $view_data['files'] = $upload_data;
+        }
+        if($self_upload_data){
+            $view_data['self_files'] = $self_upload_data;
+        }
+        //echo "<pre>";print_r($upload_data);exit;
         $view_data['data'] = $users_data;
+
         return $view_data;
 
     }
