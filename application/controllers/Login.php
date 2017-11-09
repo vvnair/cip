@@ -231,6 +231,10 @@ class Login extends CI_Controller {
     public function add_company(){
         $data = $this->input->post();
         $insert = $this->register->add_company($data);
+
+        $admin_page_data = $this->admin_page_data();
+        $this->load->view('admin_profile_page',$admin_page_data);
+
     }
     public function download(){
         $this->load->helper('download');
@@ -406,6 +410,7 @@ class Login extends CI_Controller {
         $data = $this->input->post();//echo "<pre>";print_r($data);print_r(count($data['company']));exit;
         $update = $this->register->update_role($data);
 
-        redirect('http://localhost/cip/index.php/Login/do_login','refresh');
+        $admin_page_data = $this->admin_page_data();
+        $this->load->view('admin_profile_page',$admin_page_data);
     }
 }
