@@ -172,12 +172,18 @@
                                                                     </select>
                                                                 </td>
                                                                 <input type="hidden" name="user_id" value="<?php echo $v->id; ?>"/>
+                                                                <?php //echo "<pre>";print_r($cmp_users);exit; ?>
                                                                 <td>
-                                                                    <select name="company[]" multiple class="form-control">
-                                                                        <?php foreach($companies as $k  => $c){ ?>
-                                                                            <option value="<?php echo $c->id;?>" <?php foreach($cmp_users as $key => $val){
-                                                                                    if($val->id == $c->id && $val->user_id == $v->id) { ?> selected <?php
-                                                                             } }?> ><?php echo $c->company;?></option>
+                                                                    <select class="form-control" multiple name="company[]">
+                                                                        <?php foreach($companies as $k => $c){ ?>
+                                                                            <option value="<?php echo $c->id; ?>"
+                                                                                <?php if(!empty($cmp_users)){
+                                                                                    foreach($cmp_users as $no => $valu){
+                                                                                    if($valu->id == $c->id && $valu->user_id == $v->id){ ?>
+                                                                                        selected
+                                                                                    <?php }
+                                                                                } } ?>
+                                                                            ><?php echo $c->company; ?></option>
                                                                         <?php } ?>
                                                                     </select>
                                                                 </td>
