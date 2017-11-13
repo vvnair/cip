@@ -32,8 +32,8 @@
                                                             <th>No</th>
                                                             <th>SR Number</th>
                                                             <th>User ID</th>
-                                                            <th>Billing Address</th>
                                                             <th>Implementation Address</th>
+							    <th>Billing Address</th>
                                                             <th>Bandwidth</th>
                                                             <th>Status</th>
                                                             <th>Documents Uploaded till now </th>
@@ -42,10 +42,10 @@
                                                         <tbody>
                                                             <?php foreach($data as $k => $v){ ?>
                                                                 <tr>
-                                                                    <td><?php echo $k+1; ?></td>
+                                                                    <td style="text-align: center;"><?php echo $k+1; ?></td>
                                                                     <td>
                                                                         <strong>
-                                                                            <?php echo $v->request_number . "<br /> <br /> Requested on : ". $v->request_date;?>
+                                                                            <?php echo $v->request_number . "</strong><br /> <br /> Requested on : ". $v->request_date;?>
                                                                             <?php
                                                                                 foreach($last_update as $r => $o){
                                                                                     foreach($o as $l =>$e){
@@ -55,30 +55,33 @@
                                                                                     }
                                                                                 }
                                                                             ?>
-                                                                        </strong>
+                                                                        
                                                                     </td>
                                                                     <td><?php echo $v->email;?></td>
-                                                                    <td><a href="#" data-toggle="tooltip" title="<?php echo $v->company."\n".$v->baddress1 . "\n ". $v->baddress2 . "\n " . $v->baddress3 . "\n" . $v->bcity . "\n " . $v->bstate . "\n " . $v->bcountry . "\n " . $v->bzipcode . " \n GSTIN No: " . $v->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                                                                    
                                                                     <td><?php echo $v->company ."<br />". $v->iaddress1 . "<br /> ". $v->iaddress2 . " <br/>" . $v->iaddress3 . "<br /> " . $v->icity . "<br /> " . $v->istate . "<br /> " . $v->icountry . "<br /> " . $v->izipcode . " <br /> GSTIN No: " . $v->igst ; ; ?></td>
-                                                                    <td><?php echo $v->bandwidth; ?></td>
+								    <td style="text-align: center;"><a href="#" data-toggle="tooltip" title="<?php echo $v->company."\n".$v->baddress1 . "\n ". $v->baddress2 . "\n " . $v->baddress3 . "\n" . $v->bcity . "\n " . $v->bstate . "\n " . $v->bcountry . "\n " . $v->bzipcode . " \n GSTIN No: " . $v->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                                                                    <td style="text-align: center;"><?php echo $v->bandwidth; ?></td>
                                                                     <td><?php echo $v->status; ?></td>
                                                                     <td>
+									<ul>
                                                                         <?php if($v->status == 'feasible') {
                                                                             foreach ($files as $k => $vu) { ?>
-                                                                                <?php foreach($vu as $y => $z) { ?>
+                                                                                <?php foreach($vu as $y => $z) { ?> <li>
                                                                                     <?php if($z->sr_request_number == $v->request_number) {  ?>
-                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo ucfirst($z->filename); ?>  </a> </div><br/>
-                                                                                    <?php } ?>
+                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo strtoupper($z->filename); ?>  </a> </div><br/>
+                                                                                    <?php } ?></li>
                                                                                 <?php } ?>
                                                                         <?php    } ?>
                                                                         <?php } ?>
                                                                         <?php foreach($self_files as $l => $e ){
-                                                                                foreach($e as $a => $b){ ?>
+                                                                                foreach($e as $a => $b){ ?><li> 
                                                                                     <?php if($b->sr_request_number == $v->request_number) {?>
-                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo ucfirst($b->filename); ?>  </a> </div><br/>
-                                                                                    <?php } ?>
+                                                                                        <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo strtoupper($b->filename); ?>  </a> </div><br/>
+                                                                                    <?php } ?></li>
                                                                             <? }
                                                                         } ?>
+									</ul>
                                                                     </td>
                                                                 </tr>
                                                             <?php }  ?>

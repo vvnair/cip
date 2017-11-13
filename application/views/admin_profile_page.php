@@ -40,8 +40,8 @@
                                                         <th>No</th>
                                                         <th>SR Number</th>
                                                         <th>User ID</th>
+							<th>Implementation Address</th>
                                                         <th>Billing Address</th>
-                                                        <th>Implementation Address</th>
                                                         <th>B/w</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -53,10 +53,10 @@
 
 
                                                  <tr>
-                                                    <td><?php echo $key+1 ; ?></td>
+                                                    <td style="text-align: center;"><?php echo $key+1 ; ?></td>
                                                     <td>
                                                         <strong>
-                                                            <?php echo $value->request_number . "<br /><br /> Requested on : ". $value->request_date; ?>
+                                                            <?php echo $value->request_number . "</strong><br /><br /> Requested on : ". $value->request_date; ?>
                                                             <?php
                                                                 foreach($last_update as $r => $o){
                                                                     foreach($o as $l =>$e){
@@ -66,16 +66,17 @@
                                                                     }
                                                                 }
                                                             ?>
-                                                        </strong>
+                                                        
                                                     </td>
                                                     <td><?php echo $value->email; ?></td>
-                                                    <td>
+<td><?php echo $value->company."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
+                                                    <td style="text-align: center;">
                                                         <a href="#" data-toggle="tooltip" title="<?php echo $value->company."\n".$value->baddress1 . "\n ". $value->baddress2 . "\n " . $value->baddress3 . "\n" . $value->bcity . "\n " . $value->bstate . "\n " . $value->bcountry . "\n " . $value->bzipcode . " \n GSTIN No: " . $value->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a>
 
                                                     </td>
 
-                                                    <td><?php echo $value->company."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode . " <br /> GSTIN No: " . $value->igst ; ; ?></td>
-                                                    <td><?php echo $value->bandwidth; ?></td>
+                                                    
+                                                    <td style="text-align: center;"><?php echo $value->bandwidth; ?></td>
                                                     <form method="post" action="<?php echo base_url(); ?>index.php/Login/update_status" enctype="multipart/form-data">
                                                     <td><select name="status" class="form-control status_select" data-id="<?php echo $value->request_number; ?>" >
                                                             <?php foreach ($statuses as $k => $v) { ?>
@@ -114,23 +115,32 @@
 
                                                     </td>
                                                     <td>
+							<ul>
                                                         <?php
-                                                            foreach($self_files as $ke => $fi){
-                                                                foreach($fi as $p => $m) { ?>
+                                                            foreach($self_files as $ke => $fi){ ?>
+								
+                                                                <?php foreach($fi as $p => $m) { ?>
+									<li>
                                                                     <?php if($m->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo ucfirst($m->filename); ?></a></div><br/>
+                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo strtoupper($m->filename); ?></a></div><br/>
                                                                     <?php } ?>
-                                                        <?php    }
-                                                            }
+								</li>
+                                                        <?php    } ?>
+								</ul>
+                                                         <?php   }
                                                         ?>
                                                         <?php if($stats == 'Proposal Accepted') {
 
-                                                            foreach($files as $k => $file){
-                                                                foreach($file as $y => $z) {?>
+                                                            foreach($files as $k => $file){ ?>
+									<ul>
+                                                             <?php  foreach($file as $y => $z) {?>
+									<li>
                                                                     <?php if($z->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo ucfirst($z->filename); ?></a></div><br/>
+                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo strtoupper($z->filename); ?></a></div><br/>
                                                                     <?php } ?>
+								</li>
                                                         <?php }}} ?>
+							</ul>
                                                     </td>
                                                     </form>
                                                   </tr>
