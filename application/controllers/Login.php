@@ -9,18 +9,22 @@ class Login extends CI_Controller {
         $this->load->library('session');
         $this->load->model('register');
         $this->load->helper('form');
+       	
         $this->load->library('email');
         error_reporting(E_ALL & ~E_NOTICE);
+        require_once(APPPATH.'third_party/PHPMailerAutoload.php');
+        $this->load->library("mail");
 
     }
 
 	public function index()
 	{
-		$this->load->view('login_form');
+	
+            $this->load->view('login_form');
 	}
 
     public function register()
-    {
+    {	
         $this->load->view('registration_form');
     }
 
@@ -29,9 +33,9 @@ class Login extends CI_Controller {
         $register_data = $this->input->post();
         $this->load->model('register');
         $this->register->register_into_db($register_data);
-        $this->sendmail_admin($register_data);
         $this->sendmail_customer($register_data);
-        $this->index();
+        $this->sendmail_admin($register_data);
+        redirect('','refresh');
     }
 
     public function sendmail_admin($data){
@@ -39,38 +43,25 @@ class Login extends CI_Controller {
         $mail['email'] = "cipvendor2017@gmail.com";
 
         $mail['subject'] = "New User Registered";
-    }
-
-    public function sendmail_customer($data){
-        $mail['text'] = "Hello ".$data['name']. "Thank you for registering in the CIP. You will be able to login only after you have been verified by the administrator. We will let you know once action has been taken. Thank you";
-        $mail['email'] = $data['email'];
-        $mail['subject'] = "Welcome";
-
         $this->sendmail($mail);
     }
 
+    public function sendmail_customer($data){
+        $mail['text'] = "Hello ".$data['name']. ". Thank you for registering in the CIP. You will be able to login only after you have been verified by the administrator. We will let you know once action has been taken. Thank you";
+        $mail['email'] = $data['email'];
+        $mail['subject'] = "Welcome";
+        
+	$this->sendmail($mail);
+    }
+
     public function sendmail($data){
+    
+    
+	$mail = new Mail();
 
-        $config = Array(
-            'protocol' => 'smtp',
-            'smtp_host' => 'ssl://smtp.googlemail.com',
-            'smtp_port' => 465,
-            'smtp_user' => 'cipvendor2017@gmail.com',
-            'smtp_pass' => '2017vendorcip',
-            'mailtype'  => 'html',
-            'charset'   => 'iso-8859-1'
-        );
-
-        $this->load->library('email', $config);
-        $this->email->set_newline("\r\n");
-
-        $this->email->from('cipvendor2017@gmail.com', 'Administrator');
-        $this->email->to($data['email']);
-
-        $this->email->subject($data['subject']);
-        $this->email->message($data['text']);
-
-        $result = $this->email->send();
+	$mail->setMailBody($data['text']);
+	$mail->sendMail($data['subject'], $data['email']);
+       
     }
     public function do_login()
     {
