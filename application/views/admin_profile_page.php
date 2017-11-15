@@ -115,20 +115,23 @@
 
                                                     </td>
                                                     <td>
+							<p>Sify Uploaded files</p>
 							<ul>
-                                                        <?php
+							<?php
                                                             foreach($self_files as $ke => $fi){ ?>
 								
                                                                 <?php foreach($fi as $p => $m) { ?>
 									<li>
                                                                     <?php if($m->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo strtoupper($m->filename); ?></a></div><br/>
+                                                                        <div><a style="color: #cc0000" href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo strtoupper($m->filename); ?></a></div><br/>
                                                                     <?php } ?>
 								</li>
                                                         <?php    } ?>
 								</ul>
                                                          <?php   }
                                                         ?>
+							<hr>
+							<p><?php echo $value->company;?> Uploaded files</p>
                                                         <?php if($stats == 'Proposal Accepted') {
 
                                                             foreach($files as $k => $file){ ?>

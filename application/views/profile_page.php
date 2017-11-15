@@ -111,23 +111,27 @@
 
                                                             <?php } ?>
                                                             </td>
-                                                            <td>
+                                                            <td><p>Sify Uploaded files</p>
+								<ul>
                                                                 <?php if($value->status == 'feasible') {
                                                                     foreach ($files as $k => $v) { ?>
-                                                                        <?php foreach($v as $y => $z) {?>
+                                                                        <?php foreach($v as $y => $z) {?><li>
                                                                             <?php if($z->sr_request_number == $value->request_number) { ?>
-                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo strtoupper($z->filename); ?>  </a> </div><br/>
-                                                                            <?php } ?>
+                                                                                <div><a style="color: #cc0000" class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo strtoupper($z->filename); ?>  </a> </div><br/>
+                                                                            <?php } ?></li>
                                                                         <?php } ?>
                                                                 <?php    } ?>
-                                                                <?php } ?>
+                                                                <?php } ?></ul>
+								<hr>
+								<p><?php echo $value->company;?> Uploaded files</p>
+								<ul>
                                                                 <?php foreach($self_files as $l => $e ){
-                                                                        foreach($e as $a => $b){ ?>
+                                                                        foreach($e as $a => $b){ ?><li>
                                                                             <?php if($b->sr_request_number == $value->request_number) {?>
                                                                                 <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo strtoupper($b->filename); ?>  </a> </div><br/>
-                                                                            <?php } ?>
+                                                                            <?php } ?></li>
                                                                     <? }
-                                                                } ?>
+                                                                } ?></ul>
                                                             </td>
                                                           </tr>
 

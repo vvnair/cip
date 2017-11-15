@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="<? echo base_url();?>/css/register.css">
+        <link rel="stylesheet" type="text/css" href="<? echo base_url();?>/css/register.css"> 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script>
         $('.btn').on('click', function () {
@@ -18,19 +18,19 @@
                     <form class="form" method="post" action="<?php echo base_url(); ?>index.php/Login/on_register">
 
                         <div class="form__group">
-                            <input type="email" placeholder="Email" class="form__input" name="email"/>
+                            <input type="email" placeholder="Email" class="form__input" name="email" required/>
                         </div>
 
                         <div class="form__group">
-                            <input type="password" placeholder="Password" class="form__input" name="password" />
+                            <input type="password" placeholder="Password" class="form__input" name="password" required />
                         </div>
 
                         <div class="form__group">
-                            <input type="text" placeholder="Name" class="form__input" name="name" />
+                            <input type="text" placeholder="Name" class="form__input" name="name" required/>
                         </div>
 
                         <div class="form__group">
-                            <input type="text" placeholder="Company Name" class="form__input" name="company_name" />
+                            <input type="text" placeholder="Company Name" class="form__input" name="company_name" required />
                         </div>
 
                         <button class="btn" type="submit">Register</button>
