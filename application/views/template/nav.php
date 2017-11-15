@@ -9,6 +9,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <?php if($this->session->userdata('sessionid')){ ?>
+	     <li><a disabled="disabled"><?php echo $this->session->userdata('username');?> ( <?php echo $this->session->userdata('role'); ?> )</a> </li>
              <li><a href="<?php echo base_url(); ?>index.php/Login/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         <?php }else{ ?>
       <li><a href="<?php echo base_url(); ?>index.php/Login/" id="logout"><span class="glyphicon glyphicon-user"></span> Login</a></li>

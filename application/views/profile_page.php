@@ -36,15 +36,16 @@
                                                 <button class="btn btn-info" style="margin-left : 10px; margin-bottom:10px;" id="print">Download</button>
                                                 <div class="table table-responsive">
                                                     <table class="table table-bordered customer_table">
-                                                        <thead>
-                                                          <tr>
+                                                        <thead >
+                                                          <tr class="info">
                                                             <th>No</th>
-                                                            <th>SR Number</th>
-							    <th>Implementation Address</th>
-                                                            <th>Billing Address</th>
+                                                            <th><nobr>SR Number</nobr></th>
+							    <th><nobr>Implementation Address</nobr></th>
+                                                            <th><nobr>Billing Address</nobr></th>
+							     <th>B/w</th>
                                                             <th>Status</th>
                                                             <th>Action</th>
-                                                            <th>Documents Uploaded till now </th>
+                                                            <th>Documents Uploaded</th>
                                                           </tr>
                                                         </thead>
                                                         <tbody>
@@ -54,11 +55,11 @@
                                                             <td style="text-align: center;"><?php echo $key+1 ; ?></td>
                                                             <td>
                                                                 <strong>
-                                                                    <?php echo $value->request_number . " </strong><br /><br /> Requested on : ". $value->request_date ;
+                                                                    <?php echo $value->request_number . " </strong><br /><br /> Submitted on:  <br />". $value->request_date ;
                                                                     foreach($last_update as $r => $o){
                                                                         foreach($o as $l =>$e){
                                                                             if($e->sr_request_number == $value->request_number){
-                                                                                echo "<br /><br /> Last updated on : ". $e->update_date . "( ". $e->updated_by ." )";
+                                                                                echo "<br /><br /> Last updated<br/>On:<nobr> ". $e->update_date . "</nobr><br/ >By: ". $e->updated_by ."";
                                                                             }
                                                                         }
                                                                     } ?>
@@ -68,7 +69,8 @@
                                                             
                                                             <td><?php echo $value->company ."<br />". $value->iaddress1 . "<br /> ". $value->iaddress2 . " <br/>" . $value->iaddress3 . "<br /> " . $value->icity . "<br /> " . $value->istate . "<br /> " . $value->icountry . "<br /> " . $value->izipcode; ?></td>
 							    <td style="text-align: center;"><a href="#" data-toggle="tooltip" title="<?php echo $value->company."\n".$value->baddress1 . "\n ". $value->baddress2 . "\n " . $value->baddress3 . "\n" . $value->bcity . "\n " . $value->bstate . "\n " . $value->bcountry . "\n " . $value->bzipcode . " \n GSTIN No: " . $value->bgst ; ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                                            <td><strong><?php echo ucfirst($value->status);?></strong>
+                                                            <td style="text-align: center;"	><?php echo $value->bandwidth; ?> </td>
+							    <td><strong><?php echo ucfirst($value->status);?></strong>
 
                                                             </td>
                                                             <td>
@@ -102,34 +104,35 @@
                                                                             </div>
 
                                                                             <button type="submit" style="margin-top: 5px;" class="btn btn-success">Change Status</button>
-                                                                            <br /><br /><strong>Current Proposal Status : </strong><?php foreach($customer_proposal_status as $p => $m) {
-                                                                                if($m->sr_request_number == $value->request_number){
-                                                                                echo $m->proposal_status;
-                                                                            }} ?>
+                                                                            <br /><br /><strong>Current Status : </strong><?php foreach($customer_proposal_status as $p => $m) {
+                                                                                if($m->sr_request_number == $value->request_number){ ?>
+										<nobr>
+                                                                                <?php echo $m->proposal_status;
+                                                                            }?></nobr> <?php } ?>
                                                                         </form>
                                                                     </div>
 
                                                             <?php } ?>
                                                             </td>
-                                                            <td><p>Sify Uploaded files</p>
-								<ul>
+                                                            <td><p><strong><u>By Sify:</u></strong></p>
+								
                                                                 <?php if($value->status == 'feasible') {
                                                                     foreach ($files as $k => $v) { ?>
-                                                                        <?php foreach($v as $y => $z) {?><li>
-                                                                            <?php if($z->sr_request_number == $value->request_number) { ?>
-                                                                                <div><a style="color: #cc0000" class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"> <?php echo strtoupper($z->filename); ?>  </a> </div><br/>
-                                                                            <?php } ?></li>
+                                                                        <?php foreach($v as $y => $z) {?><ul>
+                                                                            <?php if($z->sr_request_number == $value->request_number) { ?><li>
+                                                                                <div><a style="color: #cc0000; " class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath; ?>"><nobr> <?php echo strtoupper($z->filename); ?> </nobr> </a> </div><br/>
+                                                                            </li><?php } ?></ul>
                                                                         <?php } ?>
                                                                 <?php    } ?>
-                                                                <?php } ?></ul>
+                                                                <?php } ?>
 								<hr>
-								<p><?php echo $value->company;?> Uploaded files</p>
-								<ul>
+								<p><strong><u> By <?php echo $value->company;?>: </u></strong></p>
+								
                                                                 <?php foreach($self_files as $l => $e ){
-                                                                        foreach($e as $a => $b){ ?><li>
-                                                                            <?php if($b->sr_request_number == $value->request_number) {?>
-                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px; " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo strtoupper($b->filename); ?>  </a> </div><br/>
-                                                                            <?php } ?></li>
+                                                                        foreach($e as $a => $b){ ?><ul>
+                                                                            <?php if($b->sr_request_number == $value->request_number) {?><li>
+                                                                                <div><a class="" style="margin-bottom: 5px;margin-top: 5px;  " href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $b->fullpath; ?>"> <?php echo strtoupper($b->filename); ?>  </a> </div><br/>
+                                                                            </li><?php } ?></ul>
                                                                     <? }
                                                                 } ?></ul>
                                                             </td>

@@ -36,16 +36,16 @@
                                             <div class="table table-responsive" >
                                                 <table class="table table-bordered admin_table ">
                                                     <thead>
-                                                      <tr>
+                                                      <tr class="info">
                                                         <th>No</th>
-                                                        <th>SR Number</th>
+                                                        <th><nobr>SR Number</nobr></th>
                                                         <th>User ID</th>
-							<th>Implementation Address</th>
-                                                        <th>Billing Address</th>
+							<th><nobr>Implementation Address</nobr></th>
+                                                        <th><nobr>Billing Address</nobr></th>
                                                         <th>B/w</th>
-                                                        <th>Status</th>
+                                                        <th><nobr>Status</nobr></th>
                                                         <th>Action</th>
-                                                        <th>Documents Uploaded till Date </th>
+                                                        <th><nobr>Documents Uploaded</nobr></th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
@@ -56,12 +56,12 @@
                                                     <td style="text-align: center;"><?php echo $key+1 ; ?></td>
                                                     <td>
                                                         <strong>
-                                                            <?php echo $value->request_number . "</strong><br /><br /> Requested on : ". $value->request_date; ?>
+                                                            <?php echo $value->request_number . "</strong><br /><br /> Submitted on:<br/>". $value->request_date; ?>
                                                             <?php
                                                                 foreach($last_update as $r => $o){
                                                                     foreach($o as $l =>$e){
                                                                         if($e->sr_request_number == $value->request_number){
-                                                                            echo "<br /><br /> Last updated on : ". $e->update_date . "( ". $e->updated_by ." )";
+                                                                            echo "<br /><br /> Last updated<br /> On:<nobr>". $e->update_date . "</nobr><br />By: ". $e->updated_by;
                                                                         }
                                                                     }
                                                                 }
@@ -86,7 +86,7 @@
                                                         <?php $stats = "";
                                                             if($customer_proposal_data) { ?>
                                                             <div style = "margin-top : 10px;">
-                                                                Customer Response on Proposal : <?php foreach ($customer_proposal_data as $key => $val) { ?>
+                                                               <nobr> Customer Response: </nobr><?php foreach ($customer_proposal_data as $key => $val) { ?>
                                                                     <?php if($val->sr_request_number == $value->request_number){ ?>
                                                                         <strong><?php echo $val->proposal_status;
                                                                                 $stats = $val->proposal_status;
@@ -115,33 +115,32 @@
 
                                                     </td>
                                                     <td>
-							<p>Sify Uploaded files</p>
-							<ul>
+							<p><strong><u>By Sify:</u></strong></p>
+							
 							<?php
                                                             foreach($self_files as $ke => $fi){ ?>
 								
-                                                                <?php foreach($fi as $p => $m) { ?>
-									<li>
-                                                                    <?php if($m->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a style="color: #cc0000" href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"><?php echo strtoupper($m->filename); ?></a></div><br/>
-                                                                    <?php } ?>
-								</li>
+                                                                <?php foreach($fi as $p => $m) { ?><ul>
+									
+                                                                    <?php if($m->sr_request_number == $value->request_number){ ?><li>
+                                                                        <div><a style="color: #cc0000" href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $m->fullpath;?>"> <nobr><?php echo strtoupper($m->filename); ?></nobr></a></div><br/>
+                                                                  </li> <?php } ?>
+							</ul>	
                                                         <?php    } ?>
-								</ul>
-                                                         <?php   }
+							<?php   }
                                                         ?>
 							<hr>
-							<p><?php echo $value->company;?> Uploaded files</p>
+							<p><strong><u>By <?php echo $value->company;?>:</u></strong></p>
                                                         <?php if($stats == 'Proposal Accepted') {
 
                                                             foreach($files as $k => $file){ ?>
-									<ul>
+									
                                                              <?php  foreach($file as $y => $z) {?>
-									<li>
-                                                                    <?php if($z->sr_request_number == $value->request_number){ ?>
-                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath;?>"><?php echo strtoupper($z->filename); ?></a></div><br/>
-                                                                    <?php } ?>
-								</li>
+									<ul>
+                                                                    <?php if($z->sr_request_number == $value->request_number){ ?><li>
+                                                                        <div><a href="<?php echo base_url(); ?>index.php/Login/download/?p=<?php echo $z->fullpath;?>"><nobr><?php echo strtoupper($z->filename); ?></nobr></a></div><br/>
+                                                                   </li> <?php } ?>
+								</ul>
                                                         <?php }}} ?>
 							</ul>
                                                     </td>
