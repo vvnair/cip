@@ -7,7 +7,8 @@
     <?php $this->load->view('template/nav'); ?>
     <?php $six_digit_random_number = mt_rand(000000, 999999);
         $request_number = "SR".$six_digit_random_number;
-        $date = date("Y-m-d");
+        date_default_timezone_set('Asia/Kolkata');
+    	$date = date("Y-m-d H:i:s");
         $session_data = $this->session->userdata();
         $user_id = $session_data['sessionid'];
 

@@ -5,8 +5,8 @@
 
 <?php $this->load->view('template/nav'); ?>
 <?php
-
-    $date = date("Y-m-d");
+    date_default_timezone_set('Asia/Kolkata');
+    $date = date("Y-m-d H:i:s");
     $session_data = $this->session->userdata();
     $user_id = $session_data['sessionid'];
 
